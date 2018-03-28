@@ -2,7 +2,9 @@
 
 import random
 import math
-from structures.teteRobot import *
+import time
+from teteRobot import *
+#from structures.arene import *
 #code
 
 class Robot:
@@ -23,22 +25,47 @@ class Robot:
         self.dimension = dimension
         self.vitesse = vitesse
         self.tete= Creation_TeteRobot()
+        self.dessin = Vue2D(self)
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
         self.rotation_bis(teta)
+        dessin.move(self)
 
     def forward(self, speed):
         self.setVitesse(speed)
+        dessin.move(self)
 
     def stop(self):
         self.setVitesse(0)
+        dessin.move(self)
 
     def set_led(self, led, r, g, b):
         print("LED: {0}, color({1}, {2}, {3})".format(led, r, g, b))
 
     def get_position(self):
     	return self.getPosition()
-#--------------------------------------------------------------------------------
+
+    def run(self,verbose=True):
+    	if verbose:
+    		print("Starting ... (with %f FPS  -- %f sleep)" % (self.fps,1./self.fps))
+    	ts=time.time()
+    	tstart = ts
+    	cpt = 1
+    	try:
+    		while not self.controler.stop():
+    			ts = time.time()
+    			self.controler.update()
+    			time.sleep(1./self.fps)
+    			if verbose:
+    				print("Loop %d, duree : %fs " % (cpt,time.time()-ts))
+    			cpt+=1
+    	except Exception as e:
+    		print("Erreur : ",e)
+    	self.stop()
+    	if verbose:
+        	print("Stoping ... total duration : %f (%f /loop)" % (time.time()-tstart,(time.time()-tstart)/cpt))
+
+#--------------------z------------------------------------------------------------
     def move_bis(self):
         x, y, z = self.position
         xdir, ydir = self.direction
@@ -170,3 +197,10 @@ class Robot:
 
         
 
+def Creation_Robot():
+	position = (0,0,0)
+	coordonnees = (0,0,0,0)
+	direction = (1,1)
+	dimension = (25, 10, 15)
+	vitesse = (10)
+	return Robot(position, coordonnees, direction, dimension, vitesse)
