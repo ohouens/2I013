@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from robot2I013 import Robot2I013
-from 
 import time
 import numpy as np
 import math

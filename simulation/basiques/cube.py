@@ -1,7 +1,4 @@
-#import
 import random
-
-#code
 
 class Cube():
     """Classe definissant un cube caractérisé par :
@@ -22,7 +19,6 @@ class Cube():
         self.larg = larg
         self.long = long
         self.haut = haut
-
         
     def safficher(self):
         """Methode d'affichage d'un cube au format :
@@ -30,32 +26,9 @@ class Cube():
         """
         print("Cube(x=",self.x,",y=",self.y,",z=",self.z,", larg=",self.larg,",long=",self.long,",haut=",self.haut,")")
 
-
-    def getPos(self):
+    def getPosition(self):
         """return la position du cube sous forme d'un triplet -> (x, y, z)"""
         return self.x, self.y, self.z
 
-def Creation_Cube(arene):
-    """Creation d'un cube de taille et coordonnees aleatoires"""
-    x = random.randint(0,arene.lx)
-    y = random.randint(0,arene.ly)
-    z = random.randint(0,arene.lz)
-    
-    larg = random.randint(50,70)
-    long = random.randint(50,70)
-    haut = random.randint(50,70)
-    
-    return Cube(x, y, z, larg, long, haut)
-
-#constructeur temporaire necessaire a tkinter (affichage graphique)
-def Creation_Cube_xy(x, y, arene):
-    """Creation d'un cube de taille aleatoire"""
-    x = x
-    y = y
-    z = random.randint(0, arene.lz)
-
-    larg = random.randint(30, 100)
-    long = random.randint(30, 100)
-    haut = random.randint(30, 100)
-
-    return Cube(x, y, z, larg, long, haut)
+    def getDimension(self):
+        return self.larg, self.long, self.haut

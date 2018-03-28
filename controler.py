@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from robot2I013 import Robot2I013
-from 
+#from reel.robot2I013 import Robot2I013
+from simulation.structures.robot import Robot
+from simulation.structures.robot import Creation_Robot
 import time
 import numpy as np
 import math
@@ -10,7 +11,7 @@ class TestControler(object):
         self.robot = robot
         self.cpt = 0
         self.moteur_pos = 1
-        self.etat = 1
+        self.etat = 45
         self.distance = 1
 
     def update(self):
@@ -40,7 +41,7 @@ class TestControler(object):
         if(self.etat == 2):
             print("on tourne")
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 255, 0)
-            self.robot.set_speed(-300, 300)
+            self.robot.rotate(300)
             self.distance += ((moteur_g - self.moteur_pos)/360)*math.pi*self.robot.WHEEL_DIAMETER
             if(self.distance>math.pi*(self.robot.WHEEL_DIAMETER/2)):
                 self.robot.stop()
@@ -53,7 +54,6 @@ class TestControler(object):
     def run(self):
         self.robot.run()
 
-"""if __name__=="__main__":
-    ctrl = TestControler(Robot2I013(None, 25))
+if __name__=="__main__":
+    ctrl = TestControler(Creation_Robot())
     ctrl.run()
-"""

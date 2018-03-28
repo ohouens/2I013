@@ -1,12 +1,11 @@
-#imports
-
 import random
 import math
 import time
-from teteRobot import *
-#from structures.arene import *
-#code
-
+from simulation.structures.teteRobot import TeteRobot
+from simulation.structures.teteRobot import Creation_TeteRobot
+from simulation.structures.arene import Arene
+from simulation.structures.arene import Creation_Arene
+from simulation.vues.vue2d import Vue2D
 class Robot:
     """
         Classe caractérisé par:
@@ -18,32 +17,36 @@ class Robot:
         sa tete: Class TeteRobot
     """
 
-    def __init__(self, position, coords, direction, dimension, vitesse):
-        self.position = position
-        self.coords = coords
-        self.direction = direction
-        self.dimension = dimension
-        self.vitesse = vitesse
-        self.tete= Creation_TeteRobot()
-        self.dessin = Vue2D(self)
+    def __init__(self, position, coords, direction, dimension, vitesse, controler=None, fps=25):
+    	self.controler = controler
+    	self.position = position
+    	self.coords = coords
+    	self.direction = direction
+    	self.dimension = dimension
+    	self.vitesse = vitesse
+    	self.tete = Creation_TeteRobot()
+    	self.arene = Creation_Arene()
+    	self.fps = fps
+    	self.dessin = Vue2D(self)
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
         self.rotation_bis(teta)
-        dessin.move(self)
+        self.dessin.move(self)
 
     def forward(self, speed):
         self.setVitesse(speed)
-        dessin.move(self)
+        self.dessin.move(self)
 
     def stop(self):
         self.setVitesse(0)
-        dessin.move(self)
+        self.dessin.move(self)
 
     def set_led(self, led, r, g, b):
         print("LED: {0}, color({1}, {2}, {3})".format(led, r, g, b))
 
     def get_position(self):
-    	return self.getPosition()
+    	x, y, z = self.getPosition()
+    	return (x, y)
 
     def run(self,verbose=True):
     	if verbose:
@@ -198,9 +201,9 @@ class Robot:
         
 
 def Creation_Robot():
-	position = (0,0,0)
+	position = (0,15,0)
 	coordonnees = (0,0,0,0)
 	direction = (1,1)
 	dimension = (25, 10, 15)
 	vitesse = (10)
-	return Robot(position, coordonnees, direction, dimension, vitesse)
+	return Robot(position, coordonnees, direction, dimension, vitesse, None)
