@@ -17,6 +17,11 @@ class Robot:
         sa tete: Class TeteRobot
     """
 
+    WHEEL_BASE_WIDTH         = 117  # distance (mm) de la roue gauche a la roue droite.
+    WHEEL_DIAMETER           = 66.5 #  diametre de la roue (mm)
+    WHEEL_BASE_CIRCUMFERENCE = WHEEL_BASE_WIDTH * math.pi # perimetre du cercle de rotation (mm)
+    WHEEL_CIRCUMFERENCE      = WHEEL_DIAMETER   * math.pi # perimetre de la roue (mm)
+
     def __init__(self, position, coords, direction, dimension, vitesse, controler=None, fps=25):
     	self.controler = controler
     	self.position = position
@@ -28,6 +33,14 @@ class Robot:
     	self.arene = Creation_Arene()
     	self.fps = fps
     	self.dessin = Vue2D(self)
+
+    	self.LED_LEFT_EYE = "LED_LEFT_EYE"
+    	self.LED_RIGHT_EYE = "LED_RIGHT_EYE"
+    	self.LED_LEFT_BLINKER = "LED_LEFT_BLINKER"
+    	self.LED_RIGHT_BLINKER = "LED_RIGHT_BLINKER"
+    	self.LED_WIFI = "LED_WIFI"
+    	self.MOTOR_LEFT= "MOTOR_LEFT"
+    	self.MOTOR_RIGHT = "MOTOR_RIGHT"
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
         self.rotation_bis(teta)
@@ -200,10 +213,10 @@ class Robot:
 
         
 
-def Creation_Robot():
+def Creation_Robot(controler):
 	position = (0,15,0)
 	coordonnees = (0,0,0,0)
 	direction = (1,1)
 	dimension = (25, 10, 15)
 	vitesse = (10)
-	return Robot(position, coordonnees, direction, dimension, vitesse, None)
+	return Robot(position, coordonnees, direction, dimension, vitesse, controler)

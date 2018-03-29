@@ -6,7 +6,7 @@ import math
 class TestControler(object):
     def __init__(self, robot):
         """ Initialise le controleur et un robot """
-        self.robot = robot
+        self.robot = robot(Creation_Robot(self))
         self.cpt = 0
         self.moteur_pos = 1
         self.etat = 1
@@ -63,7 +63,6 @@ class TestControler(object):
     def run(self):
         self.robot.run()
 
-"""if __name__=="__main__":
-    ctrl = TestControler(Robot2I013(None, 25))
+if __name__=="__main__":
+    ctrl = TestControler()
     ctrl.run()
-"""

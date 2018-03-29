@@ -19,7 +19,7 @@ class Vue2D:
 		self.window = glutCreateWindow(b"Simulation")
 		glutDisplayFunc(self.draw)
 		glutIdleFunc(self.draw)
-		#glutMainLoop()
+		glutMainLoop()
 
 	def move(self, robot):
 		self.robot = robot

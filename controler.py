@@ -6,9 +6,9 @@ import time
 import numpy as np
 import math
 class TestControler(object):
-    def __init__(self, robot):
+    def __init__(self):
         """ Initialise le controleur et un robot """
-        self.robot = robot
+        self.robot = Creation_Robot(self)
         self.cpt = 0
         self.moteur_pos = 1
         self.etat = 45
@@ -55,5 +55,5 @@ class TestControler(object):
         self.robot.run()
 
 if __name__=="__main__":
-    ctrl = TestControler(Creation_Robot())
+    ctrl = TestControler()
     ctrl.run()
