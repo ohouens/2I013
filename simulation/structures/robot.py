@@ -45,21 +45,35 @@ class Robot:
     def rotate(self, teta):
         self.rotation_bis(teta)
         self.dessin.move(self)
+        print(self.toString())
 
     def forward(self, speed):
         self.setVitesse(speed)
         self.dessin.move(self)
+        print(self.toString())
 
     def stop(self):
         self.setVitesse(0)
         self.dessin.move(self)
+        print(self.toString())
 
     def set_led(self, led, r, g, b):
         print("LED: {0}, color({1}, {2}, {3})".format(led, r, g, b))
 
     def get_position(self):
     	x, y, z = self.getPosition()
-    	return (x, y)
+    	print("x: {0}, y:{1}".format(x, y))
+    	self.move_bis()
+    	return x, y
+
+    def distance(self, last, current):
+    	x1, y1 = last
+    	x2, y2 = current
+    	print("x1: {0}, y1:{1}".format(x1, y1))
+    	print("x2: {0}, y2:{1}".format(x2, y2))
+    	print("distance: {0}".format(math.sqrt((x2-x1)**2+(y2-y1)**2)))
+    	return math.sqrt((x2-x1)**2+(y2-y1)**2)
+
 
     def run(self,verbose=True):
     	if verbose:
@@ -67,16 +81,16 @@ class Robot:
     	ts=time.time()
     	tstart = ts
     	cpt = 1
-    	try:
-    		while not self.controler.stop():
-    			ts = time.time()
-    			self.controler.update()
-    			time.sleep(1./self.fps)
-    			if verbose:
-    				print("Loop %d, duree : %fs " % (cpt,time.time()-ts))
-    			cpt+=1
-    	except Exception as e:
-    		print("Erreur : ",e)
+    	#try:
+    	while not self.controler.stop:
+    		ts = time.time()
+    		self.controler.update()
+    		time.sleep(1./self.fps)
+    		if verbose:
+    			print("Loop %d, duree : %fs " % (cpt,time.time()-ts))
+    		cpt+=1
+    	#except Exception as e:
+    	#	print("Erreur : ",e)
     	self.stop()
     	if verbose:
         	print("Stoping ... total duration : %f (%f /loop)" % (time.time()-tstart,(time.time()-tstart)/cpt))
@@ -215,8 +229,8 @@ class Robot:
 
 def Creation_Robot(controler):
 	position = (0,15,0)
-	coordonnees = (0,0,0,0)
-	direction = (1,1)
+	coordonnees = ((0,0),(0,0),(0,0),(0,0))
+	direction = (1,0)
 	dimension = (25, 10, 15)
 	vitesse = (10)
 	return Robot(position, coordonnees, direction, dimension, vitesse, controler)

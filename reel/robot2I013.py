@@ -70,7 +70,13 @@ class Robot2I013(object):
     def forward(self, speed):
         self.set_motor_dps(self.robot.MOTOR_LEFT+self.robot.MOTOR_RIGHT,speed)
 
-    def get_position(self):
+    def get_position(self, last):
+        lastRight, lastLeft = last
+        currentRight, currentLeft = self.get_motor_position()
+        print("new position: {0}".format(math.fabs(currentRight - self.lastRight)/360*math.pi*self.WHEEL_DIAMETER))
+        return math.fabs(currentRight - self.lastRight)/360*math.pi*self.WHEEL_DIAMETER
+
+    def get_last(self):
         return self.get_motor_position()
 #--------------------------------------------------------------------------------
     def run(self,verbose=True):
@@ -85,7 +91,7 @@ class Robot2I013(object):
         tstart = ts
         cpt = 1
         try:
-            while not self.controler.stop():
+            while not self.controler.stop:
                 ts = time.time()
                 self.controler.update()
                 time.sleep(1./self.fps)
