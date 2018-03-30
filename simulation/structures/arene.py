@@ -70,9 +70,9 @@ class Arene :
         return teta
     
 def Creation_Arene() :
-    lx = 200
+    lx = 1000
     ly = 200
     lz = 500 # valeurs limites de l'arène
     arene = Arene(lx,ly,lz)
-    arene.append(Cube(95,0,0,2,20,1))
+    arene.append(Cube(700+25,0,0,2,20,1))
     return arene

@@ -5,7 +5,6 @@ from simulation.structures.teteRobot import TeteRobot
 from simulation.structures.teteRobot import Creation_TeteRobot
 from simulation.structures.arene import Arene
 from simulation.structures.arene import Creation_Arene
-from simulation.vues.vue2d import Vue2D
 class Robot:
     """
         Classe caractérisé par:
@@ -32,7 +31,6 @@ class Robot:
     	self.tete = Creation_TeteRobot()
     	self.arene = Creation_Arene()
     	self.fps = fps
-    	self.dessin = Vue2D(self)
 
     	self.LED_LEFT_EYE = "LED_LEFT_EYE"
     	self.LED_RIGHT_EYE = "LED_RIGHT_EYE"
@@ -44,26 +42,23 @@ class Robot:
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
         self.rotation_bis(teta)
-        self.dessin.move(self)
         print(self.toString())
 
     def forward(self, speed):
         self.setVitesse(speed)
-        self.dessin.move(self)
         print(self.toString())
 
     def stop(self):
         self.setVitesse(0)
-        self.dessin.move(self)
         print(self.toString())
 
     def set_led(self, led, r, g, b):
         print("LED: {0}, color({1}, {2}, {3})".format(led, r, g, b))
 
     def get_position(self):
-    	x, y, z = self.getPosition()
-    	print("x: {0}, y:{1}".format(x, y))
     	self.move_bis()
+    	x, y, z = self.getPosition()
+    	#print("x: {0}, y:{1}".format(x, y))
     	return x, y
 
     def distance(self, last, current):
@@ -94,7 +89,6 @@ class Robot:
     	self.stop()
     	if verbose:
         	print("Stoping ... total duration : %f (%f /loop)" % (time.time()-tstart,(time.time()-tstart)/cpt))
-
 #--------------------z------------------------------------------------------------
     def move_bis(self):
         x, y, z = self.position

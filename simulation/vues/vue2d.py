@@ -1,14 +1,16 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+import time
 import sys
 
 class Vue2D:
-	def __init__(self, robot):
+	def __init__(self, controler):
 		self.window = 0
 		self.width = 200
 		self.height = 200
-		self.robot = robot
+		self.controler = controler
+		self.robot = controler.robot
 		self.width = self.robot.arene.lx
 		self.height = self.robot.arene.ly
 
@@ -16,13 +18,10 @@ class Vue2D:
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
 		glutInitWindowSize(self.width, self.height)
 		glutInitWindowPosition(0, 0)
-		self.window = glutCreateWindow(b"Simulation")
+		glutCreateWindow(b"Simulation")
 		glutDisplayFunc(self.draw)
 		glutIdleFunc(self.draw)
-		#glutMainLoop()
-
-	def move(self, robot):
-		self.robot = robot
+		glutMainLoop()
 
 	def draw_arene(self):
 		for cube in self.robot.arene.cubes:
@@ -60,4 +59,5 @@ class Vue2D:
 		self.draw_robot()
 
 		glutSwapBuffers()
-		glutPostWindowRedisplay(self.window)
+		self.controler.update()
+		time.sleep(1./self.robot.fps)
