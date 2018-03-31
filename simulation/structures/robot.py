@@ -1,6 +1,7 @@
 import random
 import math
 import time
+from cste import *
 from simulation.structures.teteRobot import TeteRobot
 from simulation.structures.teteRobot import Creation_TeteRobot
 from simulation.structures.arene import Arene
@@ -21,16 +22,21 @@ class Robot:
     WHEEL_BASE_CIRCUMFERENCE = WHEEL_BASE_WIDTH * math.pi # perimetre du cercle de rotation (mm)
     WHEEL_CIRCUMFERENCE      = WHEEL_DIAMETER   * math.pi # perimetre de la roue (mm)
 
-    def __init__(self, position, coords, direction, dimension, vitesse, controler=None, fps=25):
+    def __init__(self, position, direction, dimension, vitesse, controler=None, fps=25):
     	self.controler = controler
     	self.position = position
-    	self.coords = coords
     	self.direction = direction
     	self.dimension = dimension
     	self.vitesse = vitesse
     	self.tete = Creation_TeteRobot()
     	self.arene = Creation_Arene()
     	self.fps = fps
+
+    	p1 = (self.position[0], self.position[1])
+    	p2 = (self.position[0]+ROBOT_LONGUEUR, self.position[1])
+    	p3 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]+ROBOT_HAUTEUR)
+    	p4 = (self.position[0], self.position[1]+ROBOT_HAUTEUR)
+    	self.coords = (p1, p2, p3, p4)
 
     	self.LED_LEFT_EYE = "LED_LEFT_EYE"
     	self.LED_RIGHT_EYE = "LED_RIGHT_EYE"
@@ -41,7 +47,7 @@ class Robot:
     	self.MOTOR_RIGHT = "MOTOR_RIGHT"
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
-        self.rotation_bis(teta)
+        self.rotation_bis(teta/10)
         print(self.toString())
 
     def forward(self, speed):
@@ -57,9 +63,10 @@ class Robot:
 
     def get_position(self):
     	self.move_bis()
-    	x, y, z = self.getPosition()
+    	#x, y, z = self.getPosition()
     	#print("x: {0}, y:{1}".format(x, y))
-    	return x, y
+    	p1, p2, p3, p4 = self.getCoords()
+    	return p2[0], p2[1]
 
     def distance(self, last, current):
     	x1, y1 = last
@@ -92,9 +99,10 @@ class Robot:
 #--------------------z------------------------------------------------------------
     def move_bis(self):
         x, y, z = self.position
-        xdir, ydir = self.direction
         #larg, long, haut = self.dimension
         (x0,y0), (x1,y1), (x2,y2), (x3,y3) = self.coords
+        print(((x1-x0)/ROBOT_LONGUEUR, (y1-y0)/ROBOT_LARGEUR))
+        xdir, ydir = self.direction
         
         vitesse = self.vitesse
 
@@ -159,20 +167,14 @@ class Robot:
                       ((ctx3), (cty3))]
         
         self.setCoords(newcoords)   #maj coords des 4 points du robot
-        #print("coords=",self.coords)
         self.calcdir()              #maj direction du robot
         
 
     def calcdir(self):
         """ Calcule la direction du robot (correspond a l'avant du robot) et retourne cette derniere sous la forme : (x, y) """
         (x0,y0), (x1,y1), (x2,y2), (x3,y3) = self.coords
+        self.__setDirection(((x1-x0)/ROBOT_LONGUEUR, (y1-y0)/ROBOT_LARGEUR))
 
-        dirxy1 = (self.position[0], self.position[1])
-        dirxy2 = ( ((x0 + x1)/2), ((y0+y1)/2) )
-        newdir = ( (dirxy2[0]-dirxy1[0]), (dirxy2[1]-dirxy1[1]) )
-        self.__setDirection(newdir)
-
-    
     def rotation_tete(self, teta):
         self.tete.rotation(teta)
 
@@ -199,6 +201,9 @@ class Robot:
     def getVitesse(self):
         return self.vitesse
 
+    def getCoords(self):
+    	return self.coords
+
     """-----------------------SETTER-------------------------"""
     def __setPosition(self, position):
         self.position = position
@@ -219,12 +224,9 @@ class Robot:
         """Ecrit les coordonnees du robot dans le fichier ouvert passe en argument, avec ';' comme separation"""
         f.write('Robot;' + str(self.position) + ';' +  str(self.direction) + ';' + str(self.dimension) + ';' + str(self.vitesse) + ';\n')
 
-        
-
 def Creation_Robot(controler):
 	position = (0,15,0)
-	coordonnees = ((0,0),(0,0),(0,0),(0,0))
 	direction = (1,0)
-	dimension = (25, 10, 15)
-	vitesse = (10)
-	return Robot(position, coordonnees, direction, dimension, vitesse, controler)
+	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
+	vitesse = (0)
+	return Robot(position, direction, dimension, vitesse, controler)

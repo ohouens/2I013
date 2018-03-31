@@ -1,5 +1,6 @@
 from math import acos
 from math import sqrt
+from cste import *
 from simulation.basiques.cube import Cube
 #from simulation.basiques.mur import Mur
 #from simulation.basiques.sol import Sol
@@ -70,9 +71,9 @@ class Arene :
         return teta
     
 def Creation_Arene() :
-    lx = 1000
-    ly = 200
-    lz = 500 # valeurs limites de l'arène
+    lx = ARENE_LONGUEUR
+    ly = ARENE_LARGEUR
+    lz = ARENE_HAUTEUR # valeurs limites de l'arène
     arene = Arene(lx,ly,lz)
-    arene.append(Cube(700+25,0,0,2,20,1))
+    arene.append(Cube(700+ROBOT_LONGUEUR, ROBOT_LARGEUR, 0, 2, 20, 1))
     return arene

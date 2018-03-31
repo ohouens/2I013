@@ -31,21 +31,26 @@ class TestControler(object):
             if(self.distance > 700-(2*math.pi*(self.robot.WHEEL_DIAMETER/2))):
                 self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 255, 255)
                 if(self.distance >= 700):
-                    self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
                     self.robot.stop()
+                    self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
                     self.distance = 0
-                    self.etat = 0
-                    self.stop = True
+                    self.etat = 2
+                    #self.stop = True
                 else:
                     self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
                     self.robot.forward(20)
         if(self.etat == 2):
             print("on tourne")
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 255, 0)
-            self.robot.rotate(300)
-            if(distance>math.pi*(self.robot.WHEEL_DIAMETER/2)):
+            self.robot.rotate(100)
+            self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
+            print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER/1.5)/4))
+            if(self.distance>math.pi*(self.robot.WHEEL_DIAMETER/1.5)/4):
                 self.robot.stop()
+                self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
+                self.distance = 0
                 self.etat = 1
+                #self.stop = True
         if(self.etat == 45):
             self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 0, 255)

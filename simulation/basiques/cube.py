@@ -27,8 +27,14 @@ class Cube():
         print("Cube(x=",self.x,",y=",self.y,",z=",self.z,", larg=",self.larg,",long=",self.long,",haut=",self.haut,")")
 
     def getPosition(self):
-        """return la position du cube sous forme d'un triplet -> (x, y, z)"""
         return self.x, self.y, self.z
 
     def getDimension(self):
         return self.larg, self.long, self.haut
+
+    def getCoords(self):
+        p1 = self.x, self.y
+        p2 = self.x+self.larg, self.y
+        p3 = self.x+self.larg, self.y+self.long
+        p4 = self.x, self.y+self.long
+        return p1, p2, p3, p4
