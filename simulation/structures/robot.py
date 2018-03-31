@@ -101,7 +101,6 @@ class Robot:
         x, y, z = self.position
         #larg, long, haut = self.dimension
         (x0,y0), (x1,y1), (x2,y2), (x3,y3) = self.coords
-        print(((x1-x0)/ROBOT_LONGUEUR, (y1-y0)/ROBOT_LARGEUR))
         xdir, ydir = self.direction
         
         vitesse = self.vitesse
