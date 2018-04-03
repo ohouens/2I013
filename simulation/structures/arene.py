@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from math import acos
 from math import sqrt
 from cste import *
