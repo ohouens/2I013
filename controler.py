@@ -22,8 +22,9 @@ class TestControler(object):
         print('Etat: {0}'.format(self.etat))
         self.currentPosition = self.robot.get_position()
         if(self.etat == 0):
-            print("rien")
-        if(self.etat == 1):
+            exit(0)
+            #print("rien")
+        elif(self.etat == 1):
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 0, 255)
             self.robot.forward(300)
             self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
@@ -39,22 +40,25 @@ class TestControler(object):
                 else:
                     self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
                     self.robot.forward(20)
-        if(self.etat == 2):
+        elif(self.etat == 2):
             print("on tourne")
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 255, 0)
             self.robot.rotate(100)
             self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
-            print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER/1.5)/4))
-            if(self.distance>math.pi*(self.robot.WHEEL_DIAMETER/1.5)/4):
+            print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER/1.4)/4))
+            if(self.distance>math.pi*(self.robot.WHEEL_DIAMETER/1.4)/4):
                 self.robot.stop()
                 self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
                 self.distance = 0
                 self.etat = 1
                 #self.stop = True
-        if(self.etat == 45):
+        elif(self.etat == 45):
             self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 0, 255)
+        else:
+            print('rien')
         self.lastPosition = self.currentPosition
+        
     def stop(self):
         return self.stop
     def run(self):
