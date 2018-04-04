@@ -33,10 +33,10 @@ class Robot:
     	self.arene = Creation_Arene()
     	self.fps = fps
 
-    	p1 = (self.position[0], self.position[1])
-    	p2 = (self.position[0]+ROBOT_LONGUEUR, self.position[1])
-    	p3 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]+ROBOT_HAUTEUR)
-    	p4 = (self.position[0], self.position[1]+ROBOT_HAUTEUR)
+    	p1 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]-ROBOT_LARGEUR)
+    	p2 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]-ROBOT_LARGEUR)
+    	p3 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
+    	p4 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
     	self.coords = (p1, p2, p3, p4)
 
     	self.LED_LEFT_EYE = "LED_LEFT_EYE"
@@ -225,7 +225,7 @@ class Robot:
         f.write('Robot;' + str(self.position) + ';' +  str(self.direction) + ';' + str(self.dimension) + ';' + str(self.vitesse) + ';\n')
 
 def Creation_Robot(controler):
-	position = (0,15,0)
+	position = (30,30,0)
 	direction = (1,0)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
