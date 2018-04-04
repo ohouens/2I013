@@ -29,7 +29,12 @@ class Vue2D:
 			self.draw_rect(cube.getCoords())
 
 	def draw_robot(self):
+		p1, p2, p3, p4 = self.robot.getCoords()
 		self.draw_rect(self.robot.getCoords())
+		#self.draw_rect(self.robot.leftWheel().getCoords())
+		#self.draw_rect(self.robot.rightWheel().getCoords())
+		#self.draw_rect(self.robot.head().getCoords())
+
 
 	def draw_rect(self, coords):
 		p1,p2, p3, p4 = coords
