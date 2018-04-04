@@ -13,17 +13,32 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
+        self.strategie = 4
         self.etat = 1
+        self.tour = 0
         self.distance = 0
         self.vue = Vue2D(self)
 
     def update(self):
-    #etat: 0=initialisation, 1=droit_70, 2=rotation à gauche, 3=carre
+    #strategie 0=exit, 3=carre, 4=cercle
+    #etat: 0=initialisation, 1=droit_70, 2=rotation à gauche, courbe à gauche
         print('Etat: {0}'.format(self.etat))
         self.currentPosition = self.robot.get_position()
         if(self.etat == 0):
-            exit(0)
-            #print("rien")
+            if(self.strategie == 0):
+                exit(0)
+            elif(self.strategie == 1):
+                self.tour = 0
+                self.etat = 2
+            elif(self.strategie == 3):
+                if(self.tour < 4):
+                    self.etat = 2
+                else:
+                    self.strategie = 0
+            elif(self.strategie == 4):
+                self.etat = 3
+            else:
+                print("rien")
         elif(self.etat == 1):
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 0, 255)
             self.robot.forward(300)
@@ -35,7 +50,7 @@ class TestControler(object):
                     self.robot.stop()
                     self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
                     self.distance = 0
-                    self.etat = 2
+                    self.etat = 0
                     #self.stop = True
                 else:
                     self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
@@ -50,8 +65,12 @@ class TestControler(object):
                 self.robot.stop()
                 self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
                 self.distance = 0
+                self.tour += 1
                 self.etat = 1
                 #self.stop = True
+        elif(self.etat == 3):
+            self.robot.forward(50)
+            self.robot.rotate(50)
         elif(self.etat == 45):
             self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 0, 255)
