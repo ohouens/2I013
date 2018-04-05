@@ -18,10 +18,11 @@ class TestControler(object):
         self.tour = 0
         self.distance = 0
         self.vue = Vue2D(self)
+        self.cpt=0
 
     def update(self):
-    #strategie 0=exit, 3=carre, 4=cercle
-    #etat: 0=initialisation, 1=droit_70, 2=rotation à gauche, courbe à gauche
+    #strategie 0=exit, 3=carre, 4=cercle, 5=séries de photos
+    #etat: 0=initialisation, 1=droit_70, 2=rotation à gauche, 3=courbe à gauche, 4=photo
         print('Etat: {0}'.format(self.etat))
         self.currentPosition = self.robot.get_position()
         if(self.etat == 0):
@@ -37,6 +38,8 @@ class TestControler(object):
                     self.strategie = 0
             elif(self.strategie == 4):
                 self.etat = 3
+            elif(self.strategie == 5):
+                self.etat = 1
             else:
                 print("rien")
         elif(self.etat == 1):
@@ -71,6 +74,11 @@ class TestControler(object):
         elif(self.etat == 3):
             self.robot.forward(50)
             self.robot.rotate(50)
+        elif(self.etat == 5):
+            if(cpt%250):
+                self.robot.save_image(self.cpt)
+                cpt++
+                self.etat=0
         elif(self.etat == 45):
             self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 0, 255)
