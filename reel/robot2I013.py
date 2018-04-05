@@ -65,20 +65,20 @@ class Robot2I013(object):
         self._gpg.set_motor_limits(self._gpg.MOTOR_LEFT+self._gpg.MOTOR_RIGHT,0)
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
-        self.set_motor_dps(self.robot.MOTOR_LEFT, teta)
-        self.set_motor_dps(self.robot.MOTOR_RIGHT, -teta)
+        self.set_motor_dps(self.MOTOR_LEFT, teta)
+        self.set_motor_dps(self.MOTOR_RIGHT, -teta)
 
     def forward(self, speed):
-        self.set_motor_dps(self.robot.MOTOR_LEFT+self.robot.MOTOR_RIGHT,speed)
+        self.set_motor_dps(self.MOTOR_LEFT+self.MOTOR_RIGHT,speed)
 
-    def get_position(self, last):
-        lastRight, lastLeft = last
-        currentRight, currentLeft = self.get_motor_position()
-        print("new position: {0}".format(math.fabs(currentRight - self.lastRight)/360*math.pi*self.WHEEL_DIAMETER))
-        return math.fabs(currentRight - self.lastRight)/360*math.pi*self.WHEEL_DIAMETER
-
-    def get_last(self):
+    def get_position(self):
         return self.get_motor_position()
+        
+
+    def distance(self, last, current):
+        lastRight, LastLeft = last
+        currentRight, currentLeft = current
+        return math.fabs(currentRight-lastRight)*self.WHEEL_CIRCUMFERENCE/360
 #--------------------------------------------------------------------------------
     def run(self,verbose=True):
         """ 
@@ -91,16 +91,16 @@ class Robot2I013(object):
         ts=time.time()
         tstart = ts
         cpt = 1
-        try:
-            while not self.controler.stop:
-                ts = time.time()
-                self.controler.update()
-                time.sleep(1./self.fps)
-                if verbose:
-                    print("Loop %d, duree : %fs " % (cpt,time.time()-ts))
-                cpt+=1
-        except Exception as e:
-            print("Erreur : ",e)
+        #try:
+        while not self.controler.stop:
+            ts = time.time()
+            self.controler.update()
+            time.sleep(1./self.fps)
+            if verbose:
+                print("Loop %d, duree : %fs " % (cpt,time.time()-ts))
+            cpt+=1
+        #except Exception as e:
+        #    print("Erreur : ",e)
         self.stop()
         if verbose:
             print("Stoping ... total duration : %f (%f /loop)" % (time.time()-tstart,(time.time()-tstart)/cpt))
