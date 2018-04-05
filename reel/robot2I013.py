@@ -6,6 +6,7 @@ from io import BytesIO
 from PIL import Image
 from di_sensors import distance_sensor as ds_sensor
 from di_sensors import  inertial_measurement_unit as imu
+from PIL import Image
 
 class Robot2I013(object):
     """ 
@@ -194,4 +195,24 @@ class Robot2I013(object):
         stream.close()
         return img
     
+    def dist_image(self, img1):
+        """ retourne la distance entre deux images """
+        
+        img = self.getimage()
+        width, height = img.size
+        img2 = img.crop((x, y, larg, haut))
+        img2 = img.resize((width, height))
+        distance = 0
 
+        for i in range(width):
+            for j in range(height):
+                r1, g1, b1 = img1.getpixel((i, j))
+                r2, g2, b2 = img.getpixel((i, j))
+                distance += ((r2-r1)**2+(g2-g1)**2+(b2-b1)**2)
+
+        return distance
+
+    def save_image(self, cpt):
+        img = self.getimage()
+        imgpil = Image.fromarray(img)
+        imgpil.save("tmp/img{0}.jpeg".format(cpt))
