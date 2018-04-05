@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
-#from reel.robot2I013 import Robot2I013
-from simulation.structures.robot import Robot
-from simulation.structures.robot import Creation_Robot
-from simulation.vues.vue2d import Vue2D
+from reel.robot2I013 import Robot2I013
+#from simulation.structures.robot import Robot
+#from simulation.structures.robot import Creation_Robot
+#from simulation.vues.vue2d import Vue2D
 import time
 import numpy as np
 import math
 class TestControler(object):
     def __init__(self):
         """ Initialise le controleur et un robot """
-        self.robot = Creation_Robot(self)
+        self.robot = Robot2I013(self,25)
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        self.strategie = 4
+        self.strategie = 3
         self.etat = 1
         self.tour = 0
         self.distance = 0
-        self.vue = Vue2D(self)
+        #self.vue = Vue2D(self)
         self.cpt=0
 
     def update(self):
@@ -57,11 +57,11 @@ class TestControler(object):
                     #self.stop = True
                 else:
                     self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
-                    self.robot.forward(20)
+                    self.robot.forward(45)
         elif(self.etat == 2):
             print("on tourne")
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 255, 0)
-            self.robot.rotate(100)
+            self.robot.rotate(300)
             self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
             print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER/1.4)/4))
             if(self.distance>math.pi*(self.robot.WHEEL_DIAMETER/1.4)/4):
@@ -77,7 +77,7 @@ class TestControler(object):
         elif(self.etat == 5):
             if(cpt%250):
                 self.robot.save_image(self.cpt)
-                cpt++
+                self.ctp+=1
                 self.etat=0
         elif(self.etat == 45):
             self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
