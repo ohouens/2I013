@@ -13,8 +13,8 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        self.strategie = 0
-        self.etat = 2
+        self.strategie = 3
+        self.etat = 1
         self.tour = 0
         self.distance = 0
         #self.vue = Vue2D(self)
@@ -35,7 +35,7 @@ class TestControler(object):
                 self.etat = 2
             elif(self.strategie == 3):
                 if(self.tour < 4):
-                    self.etat = 2
+                    self.etat = 1
                 else:
                     self.strategie = 0
             elif(self.strategie == 4):
@@ -56,23 +56,24 @@ class TestControler(object):
                     self.robot.stop()
                     self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
                     self.distance = 0
-                    self.etat = 0
+                    self.etat = 2
                     #self.stop = True
                 else:
                     self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
                     self.robot.forward(45)
         elif(self.etat == 2):
-            print("on tourne")
             self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 255, 0)
             self.robot.rotate(300)
             self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
-            print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER)/4))
-            if(self.distance>math.pi*(self.robot.WHEEL_DIAMETER)/4):
+            print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER*1.6)/4))
+            if(self.distance>math.pi*(self.robot.WHEEL_DIAMETER*1.6)/4):
                 self.robot.stop()
                 self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
                 self.distance = 0
                 self.tour += 1
                 self.etat = 0
+                if(self.tour == 4):
+                    self.strategie=0
                 #self.stop = True
         elif(self.etat == 3):
             self.robot.forward(50)
