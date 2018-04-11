@@ -26,17 +26,17 @@ class Vue2D:
 
 	def draw_arene(self):
 		for cube in self.robot.arene.cubes:
-			self.draw_rect(cube.getCoords())
+			self.draw_quad(cube.getCoords())
 
 	def draw_robot(self):
 		p1, p2, p3, p4 = self.robot.getCoords()
-		self.draw_rect(self.robot.getCoords())
-		#self.draw_rect(self.robot.leftWheel().getCoords())
-		#self.draw_rect(self.robot.rightWheel().getCoords())
-		#self.draw_rect(self.robot.head().getCoords())
+		self.draw_quad(self.robot.getCoords())
+		#self.draw_quad(self.robot.leftWheel().getCoords())
+		#self.draw_quad(self.robot.rightWheel().getCoords())
+		#self.draw_quad(self.robot.head().getCoords())
 
 
-	def draw_rect(self, coords):
+	def draw_quad(self, coords):
 		p1,p2, p3, p4 = coords
 		glBegin(GL_QUADS)
 		glVertex2f(p1[0], p1[1])
