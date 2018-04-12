@@ -37,7 +37,7 @@ class Vue2D:
 
 
 	def draw_quad(self, coords):
-		p1,p2, p3, p4 = coords
+		p1, p2, p3, p4 = coords
 		glBegin(GL_QUADS)
 		glVertex2f(p1[0], p1[1])
 		glVertex2f(p2[0], p2[1])
