@@ -274,11 +274,11 @@ class Robot:
                 for z in range(fenetre[0]):
                     for k in range(fenetre[1]):
                         r, g, b =img.getpixel((i+z,j+k))
-                        if(r>b and b>=g and math.fabs(r-b)>=20):
+                        if(r>b and b>g and math.fabs(r-b)>=20 and (math.fabs(r-b)>=20 and math.fabs(r-g)>=20 and math.fabs(g-b)>=20)):
                             cpt_r+=1
-                        elif(b>g and g>=r and math.fabs(b-g)>=20):
+                        elif(b>g and g>r and math.fabs(b-g)>=20 and (math.fabs(r-b)>=20 and math.fabs(r-g)>=20 and math.fabs(g-b)>=20)):
                             cpt_b+=1
-                        elif(g>r and r>=b and math.fabs(g-r)>=20):
+                        elif(g>r and r>b and math.fabs(g-r)>=20 and (math.fabs(r-b)>=20 and math.fabs(r-g)>=20 and math.fabs(g-b)>=20)):
                             cpt_g+=1
                         elif(math.fabs(r-g)<=20 and r>b):
                             cpt_y+=1
