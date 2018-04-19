@@ -7,6 +7,8 @@ from simulation.structures.teteRobot import TeteRobot
 from simulation.structures.teteRobot import Creation_TeteRobot
 from simulation.structures.arene import Arene
 from simulation.structures.arene import Creation_Arene
+from PIL import Image
+
 class Robot:
     """
         Classe caractérisé par:
@@ -217,12 +219,104 @@ class Robot:
     def setCoords(self, coords):
         self.coords = coords
         
+#---------------------------------------------------------------------------------       
+
+    def get_image(self):
+        return True
+
+    def dist_image(self, img1, img2):
+        """ retourne la distance entre deux images """
         
-    
-    """-----------------------SAVER-------------------------"""
-    def toSaveF(self, f):
-        """Ecrit les coordonnees du robot dans le fichier ouvert passe en argument, avec ';' comme separation"""
-        f.write('Robot;' + str(self.position) + ';' +  str(self.direction) + ';' + str(self.dimension) + ';' + str(self.vitesse) + ';\n')
+        #img = self.getimage()
+        img1= Image.open(img1)
+        img2= Image.open(img2)
+
+        width, height = img1.size
+        #img2 = img1.crop((10, 10, width, height))
+        #img2 = img2.resize((width, height))
+        #img1 = img1.resize((width,height))
+        distance = 0
+
+        for i in range(width):
+            for j in range(height):
+                r1, g1, b1 = img1.getpixel((i, j))
+                r2, g2, b2 = img2.getpixel((i, j))
+                distance += ((r2-r1)**2+(g2-g1)**2+(b2-b1)**2)
+                print("distance:",distance)
+
+        return distance
+
+    def save_image(self, cpt):
+        img = self.get_image()
+        imgpil = Image.fromarray(img)
+        imgpil.save("tmp/img{0}.jpeg".format(cpt))
+
+    def detecter_balise(self, img):
+        dist = 10
+        #nb_pixel= ((dist//4)*(dist//4))//2
+        nb_pixel= 3
+        fenetre = (dist,dist)
+        img = Image.open(img)
+        width, height = img.size
+        cpt_r = 0
+        cpt_b = 0
+        cpt_g = 0
+        cpt_y = 0
+        v=0
+        i = 0
+        j = 0
+       # cible = (0,0)
+        while i<width:
+            j=0
+            while j<height:
+                v=0
+                print("{0},{1}".format(i,j))
+                for z in range(fenetre[0]):
+                    for k in range(fenetre[1]):
+                        r, g, b =img.getpixel((i+z,j+k))
+                        if(r>b and b>=g and math.fabs(r-b)>=20):
+                            cpt_r+=1
+                        elif(b>g and g>=r and math.fabs(b-g)>=20):
+                            cpt_b+=1
+                        elif(g>r and r>=b and math.fabs(g-r)>=20):
+                            cpt_g+=1
+                        elif(math.fabs(r-g)<=20 and r>b):
+                            cpt_y+=1
+                j+=dist
+                print ("r=",cpt_r)
+                print ("b=",cpt_b)
+                print ("g=",cpt_g)
+                print ("y=",cpt_y)
+                #if(cpt_r>=nb_pixel and cpt_b>=nb_pixel and cpt_g>=nb_pixel and cpt_y>=nb_pixel):
+                if(cpt_r>=nb_pixel):
+                    v+=1
+                if(cpt_b>=nb_pixel):
+                    v+=1
+                if(cpt_y>=nb_pixel):
+                    v+=1
+                if(cpt_g>=nb_pixel):
+                    v+=1
+
+                print("v=", v)
+                if(v >= 3):
+                # cible = (i,j)
+                    print("Cible trouvée: pixel:",i,j)
+                    for x in range(dist):
+                        for y in range(dist):
+                            img.putpixel((i+x,j+y),(255,0,255))
+                            
+                    img.show()
+                    #img.close()
+
+                    return True
+                cpt_r = 0
+                cpt_y = 0
+                cpt_g = 0
+                cpt_b = 0
+            i+=dist
+
+        print("Pas de cible")
+        return False
 
 def Creation_Robot(controler):
 	position = (30,30,0)
