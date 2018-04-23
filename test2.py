@@ -78,11 +78,13 @@ def Ground():
     glEnd()
 
 def Cube():
+    x = 0
     glBegin(GL_QUADS)
     for surface in surfaces:
-        x = 0
+        #x = 0
+        x+=1
         for vertex in surface:
-            x+=1
+            #x+=1
             glColor3fv(colors[x])
             glVertex3fv(verticies[vertex])
     glEnd()
@@ -93,23 +95,15 @@ def Cube():
             glVertex3fv(verticies[vertex])
     glEnd()
 
-def refresh3d(width, height):
-    glViewport(0, 0, display[0], display[1])
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    glOrtho(0.0, display[0], 0.0, height, 0.0, display[1])
-    glMatrixMode (GL_MODELVIEW)
-    glLoadIdentity()
-
 def draw():
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	#glLoadIdentity()
 	glRotatef(1,0,1,0)
-	glTranslatef(0,0,-1)
+	#glTranslatef(0,0,-1)
 	#refresh3d(width, height)
 	#Ground()
 	Cube()
-	time.sleep(1./1)
+	time.sleep(1./25)
 
 	glutSwapBuffers()
 
