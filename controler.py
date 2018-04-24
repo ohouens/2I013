@@ -15,7 +15,7 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        self.strategie = 4
+        self.strategie = 2
         self.tour = 0
         self.temoin = False
         self.distance = 0
@@ -78,7 +78,7 @@ class TestControler(object):
         self.currentPosition = self.robot.get_position()
         if(self.strategie == 0):
             self.robot.stop()
-            exit(0)
+            #exit(0)
         elif(self.strategie == 1):
             if(self.droit(700)):
                 self.strategie = 0

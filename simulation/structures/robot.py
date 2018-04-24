@@ -17,6 +17,7 @@ class Robot:
         Sa direction: triplet(a, b)
         Sa dimension(final): triplet(longueur, largeur, hauteur)
         Sa vitesse: entier
+        Sa rotation: entier
         sa tete: Class TeteRobot
     """
 
@@ -31,6 +32,7 @@ class Robot:
     	self.direction = direction
     	self.dimension = dimension
     	self.vitesse = vitesse
+        self.rotation = 0
     	self.tete = Creation_TeteRobot()
     	self.arene = Creation_Arene()
     	self.fps = fps
@@ -50,15 +52,18 @@ class Robot:
     	self.MOTOR_RIGHT = "MOTOR_RIGHT"
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
+        self.rotation = teta
         self.rotation_bis(teta/10)
         print(self.toString())
 
     def forward(self, speed):
         self.setVitesse(speed)
+        self.rotation = 0
         print(self.toString())
 
     def stop(self):
         self.setVitesse(0)
+        self.rotation = 0
         print(self.toString())
 
     def set_led(self, led, r, g, b):
@@ -202,6 +207,9 @@ class Robot:
 
     def getVitesse(self):
         return self.vitesse
+
+    def getRotation(self):
+        return self.rotation
 
     def getCoords(self):
     	return self.coords

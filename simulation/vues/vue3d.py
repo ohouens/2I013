@@ -28,6 +28,9 @@ class Vue3D:
 		glutIdleFunc(self.draw)
 		glutMainLoop()
 
+	def echelle(self, num):
+		return num//700
+
 	def draw_arene(self):
 		for cube in self.robot.arene.cubes:
 			self.draw_cube(cube.getCoords())
