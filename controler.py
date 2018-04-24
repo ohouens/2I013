@@ -2,7 +2,8 @@
 #from reel.robot2I013 import Robot2I013
 from simulation.structures.robot import Robot
 from simulation.structures.robot import Creation_Robot
-#from simulation.vues.vue2d import Vue2D
+from simulation.vues.vue2d import Vue2D
+from simulation.vues.vue3d import Vue3D
 from cste import *
 import time
 import numpy as np
@@ -14,12 +15,12 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        self.strategie = 5
+        self.strategie = 4
         self.tour = 0
         self.temoin = False
         self.distance = 0
         self.cpt=0
-        #self.vue = Vue2D(self)
+        self.vue = Vue3D(self)
 
     def droit(self, D):
         """
@@ -99,7 +100,7 @@ class TestControler(object):
             self.courbe(LEFT, -1)
         elif(self.strategie == 5):
             print("photo")
-            self.robot.detecter_balise("reel/tmp/copiepoto.jpeg")
+            self.robot.detecter_balise("reel/tmp/img4.jpeg")
             self.strategie = 0
         else:
             print("rien")
