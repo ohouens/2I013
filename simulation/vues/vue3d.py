@@ -31,8 +31,8 @@ class Vue3D:
 	def draw_arene(self):
 		for cube in self.robot.arene.cubes:
 			self.draw_cube(cube.getCoords())
-		for balise in self.robot.arene.balises:
-			self.draw_quad(balise.getCoords())
+		#for balise in self.robot.arene.balises:
+		#	self.draw_quad(balise.getCoords())
 
 	def draw_cube(self, coords):
 		p1, p2, p3, p4 =  coords
@@ -52,13 +52,13 @@ class Vue3D:
 			(0,4),
 			(2,1),
 			(2,3),
-			(2,7),
-			(6,3),
-			(6,4),
+			(2,6),
+			(6,5),
 			(6,7),
 			(5,1),
 			(5,4),
-			(5,7)
+			(7,3),
+			(7,4)
 		)
 		colors = (
     		(1,0,0),
@@ -76,11 +76,11 @@ class Vue3D:
     	)
 		surfaces = (
     		(0,1,2,3),
-    		(3,2,7,6),
-    		(6,7,5,4),
-    		(4,5,1,0),
-    		(1,5,7,2),
-    		(4,0,3,6)
+    		(1,5,6,2),
+    		(5,6,7,4),
+    		(4,7,3,0),
+    		(0,1,5,4),
+    		(3,2,6,7)
     	)
 		x = 0
 		glBegin(GL_QUADS)
@@ -104,6 +104,8 @@ class Vue3D:
 		#glLoadIdentity()
 
 		self.draw_arene()
+		glRotatef(1,0,self.robot.getRotation(),0)
+		glTranslatef(0,0,self.robot.getVitesse())	
 
 		glutSwapBuffers()
 		self.controler.update()
