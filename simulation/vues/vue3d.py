@@ -34,8 +34,13 @@ class Vue3D:
 	def draw_arene(self):
 		for cube in self.robot.arene.cubes:
 			self.draw_cube(cube.getCoords())
-		#for balise in self.robot.arene.balises:
-		#	self.draw_quad(balise.getCoords())
+		for balise in self.robot.arene.balises:
+			x, y = balise
+			p1 = (x, y)
+			p2 = (x+3, y)
+			p3 = (x+3, y+2)
+			p4 = (x, y+2)
+			self.draw_quad((p1, p2, p3, p4))
 
 	def draw_cube(self, coords):
 		p1, p2, p3, p4 =  coords

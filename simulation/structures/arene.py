@@ -14,12 +14,13 @@ class Arene :
     - cubes : une liste contenant des "cubes"(sol,mur,obstacle) avec leurs coordonnées dans l'arene
     """
 
-    def __init__(self,lx,ly,lz,cubes=[],robots=[]) :
+    def __init__(self,lx,ly,lz,cubes=[],robots=[], balises=[]):
         self.lx = lx
         self.ly = ly
         self.lz = lz
         self.cubes = cubes
         self.robots = robots
+        self.balises = balises
 
     def append(self,obj) :
         """Si c'est possible on ajoute un cube dans l'arene
@@ -37,6 +38,10 @@ class Arene :
                 self.cubes.append(obj)
                 return True
             return False
+
+    def balise(self, x, y):
+        self.balises.append((x, y))
+
     
     def afficher(self):
 
