@@ -77,4 +77,5 @@ def Creation_Arene() :
     lz = ARENE_HAUTEUR # valeurs limites de l'arène
     arene = Arene(lx,ly,lz)
     arene.append(Cube(730+ROBOT_LONGUEUR, 15+ROBOT_LARGEUR, 0, 2, 20, 1))
+    arene.append(Cube(0, 0, 0, 1, 1, 1))
     return arene
