@@ -27,29 +27,29 @@ class Robot:
     WHEEL_CIRCUMFERENCE      = WHEEL_DIAMETER   * math.pi # perimetre de la roue (mm)
 
     def __init__(self, position, direction, dimension, vitesse, controler=None, fps=25):
-    	self.controler = controler
-    	self.position = position
-    	self.direction = direction
-    	self.dimension = dimension
-    	self.vitesse = vitesse
+        self.controler = controler
+        self.position = position
+        self.direction = direction
+        self.dimension = dimension
+        self.vitesse = vitesse
         self.rotation = 0
-    	self.tete = Creation_TeteRobot()
-    	self.arene = Creation_Arene()
-    	self.fps = fps
+        self.tete = Creation_TeteRobot()
+        self.arene = Creation_Arene()
+        self.fps = fps
 
-    	p1 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]-ROBOT_LARGEUR)
-    	p2 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]-ROBOT_LARGEUR)
-    	p3 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
-    	p4 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
-    	self.coords = (p1, p2, p3, p4)
+        p1 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]-ROBOT_LARGEUR)
+        p2 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]-ROBOT_LARGEUR)
+        p3 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
+        p4 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
+        self.coords = (p1, p2, p3, p4)
 
-    	self.LED_LEFT_EYE = "LED_LEFT_EYE"
-    	self.LED_RIGHT_EYE = "LED_RIGHT_EYE"
-    	self.LED_LEFT_BLINKER = "LED_LEFT_BLINKER"
-    	self.LED_RIGHT_BLINKER = "LED_RIGHT_BLINKER"
-    	self.LED_WIFI = "LED_WIFI"
-    	self.MOTOR_LEFT= "MOTOR_LEFT"
-    	self.MOTOR_RIGHT = "MOTOR_RIGHT"
+        self.LED_LEFT_EYE = "LED_LEFT_EYE"
+        self.LED_RIGHT_EYE = "LED_RIGHT_EYE"
+        self.LED_LEFT_BLINKER = "LED_LEFT_BLINKER"
+        self.LED_RIGHT_BLINKER = "LED_RIGHT_BLINKER"
+        self.LED_WIFI = "LED_WIFI"
+        self.MOTOR_LEFT= "MOTOR_LEFT"
+        self.MOTOR_RIGHT = "MOTOR_RIGHT"
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
         self.rotation = teta
@@ -63,7 +63,7 @@ class Robot:
 
     def stop(self):
         self.setVitesse(0)
-        self.rotation = 0
+        #self.rotation = 0
         print(self.toString())
 
     def set_led(self, led, r, g, b):
