@@ -22,7 +22,10 @@ class Vue3D:
 		glutInitWindowSize(display[0], display[1])
 		glutInitWindowPosition(0, 0)
 		glutCreateWindow(b"Simulation") 
+		glMatrixMode(GL_PROJECTION)
+		glLoadIdentity()
 		gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+		glTranslate(0,0,-5)
 		glutDisplayFunc(self.draw)
 		glutIdleFunc(self.draw)
 		glutMainLoop()
@@ -68,10 +71,10 @@ class Vue3D:
     		(1,0,0),
     		(0,1,0),
     		(0,0,1),
-    		(0,1,0),
+    		(1,0,1),
     		(1,1,1),
     		(0,1,1),
-    		(1,0,0),
+    		(0,0,0),
     		(0,1,0),
     		(0,0,1),
     		(1,0,0),
@@ -86,21 +89,21 @@ class Vue3D:
     		(0,1,5,4),
     		(3,2,6,7)
     	)
-		
+		self.draw_quad(verticies, surfaces, colors)
 		glBegin(GL_LINES)
 		for edge in edges:
 			for vertex in edge:
 				glVertex3fv(verticies[vertex])
 		glEnd()
 
-	def draw_quad(self,):
+	def draw_quad(self, verticies, surfaces, colors):
 		x = 0
 		glBegin(GL_QUADS)
 		for surface in surfaces:
-			x+=1
 			for vertex in surface:
 				glColor3fv(colors[x])
 				glVertex3fv(verticies[vertex])
+			x+=1
 		glEnd()
 
 	def draw_balise(self, coords, height):
@@ -122,23 +125,26 @@ class Vue3D:
 			(8, 3, 4, 5),
 			(7, 8, 5, 6)
 		)
-		draw_quad(verticies, surfaces, colors)
+		self.draw_quad(verticies, surfaces, colors)
 
 	def refresh3d(self):
-		glViewport(0, 0, self.width, self.height)
-		glMatrixMode(GL_PROJECTION)
-		glLoadIdentity()
-		glOrtho(0.0, self.width, 0.0, self.height, 0.0, 1.0)
+		#glViewport(0, 0, self.width, self.height)
+		#glMatrixMode(GL_PROJECTION)
+		#glLoadIdentity()
+		#glOrtho(0.0, self.width, 0.0, self.width, 0.0, self.height)
 		glMatrixMode (GL_MODELVIEW)
 		glLoadIdentity()
+		#gluLookAt(-100,-100,-100,0,0,0,0,1,0)
+		gluLookAt(-10,-40,0,50,50,50,0,0,1)
 
 	def draw(self):
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-		glLoadIdentity()
-		refresh3d()
-
+		#glLoadIdentity()
+		self.refresh3d()
+		glRotate(5,0,0,1)
 		self.draw_arene()
 
+		glFlush()
 		glutSwapBuffers()
 		self.controler.update()
 		time.sleep(1./25)
