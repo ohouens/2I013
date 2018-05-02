@@ -3,6 +3,7 @@ from math import acos
 from math import sqrt
 from cste import *
 from simulation.basiques.cube import Cube
+from simulation.basiques.balise import Balise
 #from simulation.basiques.mur import Mur
 #from simulation.basiques.sol import Sol
 
@@ -38,9 +39,8 @@ class Arene :
                 self.cubes.append(obj)
                 return True
             return False
-
-    def balise(self, x, y):
-        self.balises.append((x, y))
+        if isinstance(obj, Balise):
+            self.balises.append(balises)
 
     
     def afficher(self):
@@ -82,5 +82,5 @@ def Creation_Arene() :
     lz = ARENE_HAUTEUR # valeurs limites de l'arène
     arene = Arene(lx,ly,lz)
     arene.append(Cube(730+ROBOT_LONGUEUR, 15+ROBOT_LARGEUR, 0, 2, 20, 1))
-    arene.append(Cube(0, 0, 0, 1, 1, 1))
+    arene.append(Cube(0, 0, 0, 1, 1, 2))
     return arene
