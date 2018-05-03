@@ -15,7 +15,7 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        self.strategie = 2
+        self.strategie = 1
         self.tour = 0
         self.temoin = False
         self.distance = 0
