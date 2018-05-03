@@ -33,15 +33,32 @@ class Vue3D:
 		glutMainLoop()
 
 	def draw_arene(self):
+		self.draw_ground()
 		for cube in self.robot.arene.cubes:
 			self.draw_cube(cube.getCoords(), cube.haut)
 		for balise in self.robot.arene.balises:
-			x, y = balise
-			p1 = (x, y)
-			p2 = (x+3, y)
-			p3 = (x+3, y+2)
-			p4 = (x, y+2)
-			self.draw_quad((p1, p2, p3, p4))
+			self.draw_balise(balise.getCoords(), balise.haut, balise.larg)
+		longueur, largeur, hauteur = self.robot.getDimension()
+		self.draw_cube(self.robot.getCoords(), hauteur)
+
+	def draw_ground(self):
+		print("draw_ground")
+		verticies = (
+    		(-2000,-1,-2000),
+    		(-2000,-1,2000),
+    		(2000,-1,2000),
+    		(-2000,-1,2000)
+    	)
+    	surfaces = (
+    		(0,1,2,3)
+    	)
+    	#self.draw_cube(verticies, 1)
+    	"""glBegin(GL_QUADS)
+    	for surface in surfaces:
+       		for vertex in surface:
+           		glColor3fv(colors[x])
+            		glVertex3fv(verticies[vertex])
+    	glEnd()"""
 
 	def draw_cube(self, coords, height):
 		p1, p2, p3, p4 =  coords
@@ -108,8 +125,10 @@ class Vue3D:
 			x+=1
 		glEnd()
 
-	def draw_balise(self, coords, height):
+	def draw_balise(self, coords, height,width):
 		p1,p2,p3,p4 = coords
+		#self.draw_cube(coords, height)
+		print(p1,p2,p3,p4)
 		verticies = (
 			(p1[0], 			0, 			p1[1]),				#0
 			((p1[0]+p2[0])/2, 	0, 			(p1[1]+p2[1])/2),	#1
@@ -127,6 +146,12 @@ class Vue3D:
 			(8, 3, 4, 5),
 			(7, 8, 5, 6)
 		)
+		colors = (
+			(1,0,0),
+			(0,0,1),
+			(0,1,0),
+			(1,1,0)
+		)
 		self.draw_quad(verticies, surfaces, colors)
 
 	def refresh3d(self):
@@ -140,7 +165,7 @@ class Vue3D:
 		glOrtho(0.0, self.width, 0.0, self.width, 0.0, self.height)
 		glMatrixMode (GL_MODELVIEW)
 		glLoadIdentity()
-		gluLookAt(x,z,y,a,0,b,0,1,0)
+		gluLookAt(x,z,y,x-10*a,0,y-10*b,0,1,0)
 		#gluLookAt(-10,0,-40+self.cpt,0,0,50,0,0,1)
 
 	def draw(self):
@@ -152,5 +177,5 @@ class Vue3D:
 		glutSwapBuffers()
 		self.controler.update()
 		self.cpt += 1
-		time.sleep(1./15)
+		time.sleep(1./25)
        
