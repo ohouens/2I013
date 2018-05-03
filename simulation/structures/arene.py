@@ -26,7 +26,12 @@ class Arene :
     def append(self,obj) :
         """Si c'est possible on ajoute un cube dans l'arene
             et on return True, et False sinon"""
+        if isinstance(obj, Balise):
+            print("ajout balise")
+            self.balises.append(obj)
+            return True
         if isinstance(obj, Cube):
+            print("ajout cube")
             bx = 0<=obj.x and obj.x <= self.lx
             by = 0<=obj.y and obj.y <= self.ly
             bz = 0<=obj.z and obj.z <= self.lz
@@ -39,8 +44,6 @@ class Arene :
                 self.cubes.append(obj)
                 return True
             return False
-        if isinstance(obj, Balise):
-            self.balises.append(balises)
 
     
     def afficher(self):
@@ -83,5 +86,6 @@ def Creation_Arene() :
     arene = Arene(lx,ly,lz)
     arene.append(Cube(730+ROBOT_LONGUEUR, 15+ROBOT_LARGEUR, 0, 2, 20, 1))
     arene.append(Cube(0, 0, 0, 1, 1, 1))
-    arene.append(Cube(0, 0, 0, 100, 100, 100))
+    #arene.append(Cube(0, 25, 0, 100, 100, 100))
+    arene.append(Balise(700, 0, 0))
     return arene
