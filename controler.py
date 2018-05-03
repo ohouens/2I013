@@ -15,9 +15,9 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        self.strategie = 1
+        self.strategie = 3
         self.tour = 0
-        self.temoin = False
+        self.temoin = False 
         self.distance = 0
         self.cpt=0
         self.vue = Vue3D(self)
