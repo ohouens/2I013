@@ -16,6 +16,7 @@ class Vue3D:
 		self.robot = controler.robot
 		self.width = self.robot.arene.lx
 		self.height = self.robot.arene.ly
+		self.cpt = 0
 
 		glutInit(sys.argv)
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
@@ -25,7 +26,8 @@ class Vue3D:
 		glMatrixMode(GL_PROJECTION)
 		glLoadIdentity()
 		gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
-		glTranslate(0,0,-5)
+		glEnable(GL_DEPTH_TEST)
+		glTranslate(0,0,-3)
 		glutDisplayFunc(self.draw)
 		glutIdleFunc(self.draw)
 		glutMainLoop()
@@ -128,23 +130,27 @@ class Vue3D:
 		self.draw_quad(verticies, surfaces, colors)
 
 	def refresh3d(self):
+		x,y,z = self.robot.getPosition()
+		a,b = self.robot.getDirection()
+		print("position camera robot: ({0},{1},{2})".format(x, y, z))
+		print("regard camera robot: ({0},{1})".format(a, b))
 		#glViewport(0, 0, self.width, self.height)
 		#glMatrixMode(GL_PROJECTION)
 		#glLoadIdentity()
-		#glOrtho(0.0, self.width, 0.0, self.width, 0.0, self.height)
+		glOrtho(0.0, self.width, 0.0, self.width, 0.0, self.height)
 		glMatrixMode (GL_MODELVIEW)
 		glLoadIdentity()
-		#gluLookAt(-100,-100,-100,0,0,0,0,1,0)
-		gluLookAt(-10,-40,0,50,50,50,0,0,1)
+		gluLookAt(x,z,y,a,0,b,0,1,0)
+		#gluLookAt(-10,0,-40+self.cpt,0,0,50,0,0,1)
 
 	def draw(self):
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-		#glLoadIdentity()
 		self.refresh3d()
-		glRotate(5,0,0,1)
 		self.draw_arene()
 
 		glFlush()
 		glutSwapBuffers()
 		self.controler.update()
-		time.sleep(1./25)
+		self.cpt += 1
+		time.sleep(1./15)
+       
