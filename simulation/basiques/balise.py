@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from simulation.basiques.cube import Cube
 import random
 
 class Balise(Cube):
@@ -10,7 +11,7 @@ class Balise(Cube):
 
     def __init__(self, x, y, z):
         """Constructeur de la classe Mur"""
-        Cube.__init__(self,x,y,z,5,300,200)
+        Cube.__init__(self,x,y,z,100,100,100)
 
     def safficher(self):
         """Methode d'affichage d'un mur au format :
