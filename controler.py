@@ -5,9 +5,12 @@ from simulation.structures.robot import Creation_Robot
 from simulation.vues.vue2d import Vue2D
 from simulation.vues.vue3d import Vue3D
 from cste import *
+import pyglet
 import time
 import numpy as np
 import math
+from pyglet.gl import *
+
 class TestControler(object):
     def __init__(self):
         """ Initialise le controleur et un robot """
@@ -15,7 +18,7 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        self.strategie = 3
+        self.strategie = 6
         self.tour = 0
         self.temoin = False 
         self.distance = 0
@@ -102,6 +105,14 @@ class TestControler(object):
             print("photo")
             self.robot.detecter_balise("reel/tmp/img4.jpeg")
             self.strategie = 0
+        elif(self.strategie == 6):
+            if(not self.droit(700)):
+                if(self.cpt %10 == 0):
+                    self.robot.save_image(self.cpt)
+            else:
+                self.strategie = 0
+            self.cpt += 1
+
         else:
             print("rien")
         self.lastPosition = self.currentPosition
