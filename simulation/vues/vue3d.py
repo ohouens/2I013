@@ -23,12 +23,12 @@ class Vue3D:
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
 		glutInitWindowSize(display[0], display[1])
 		glutInitWindowPosition(0, 0)
-		glutCreateWindow(b"Simulation") 
+		glutCreateWindow(b"Simulation")
+		glutFullScreen()
 		glMatrixMode(GL_PROJECTION)
 		glLoadIdentity()
-		gluPerspective(130, (display[0]/display[1]), 0.1, 700.0)
+		gluPerspective(70, (display[0]/display[1]), 0.1, 700.0)
 		glEnable(GL_DEPTH_TEST)
-		#glTranslate(0,0,-3)
 		glutDisplayFunc(self.draw)
 		glutIdleFunc(self.draw)
 		glutMainLoop()
@@ -38,13 +38,14 @@ class Vue3D:
 		for cube in self.robot.arene.cubes:
 			self.draw_cube(cube.getCoords(), cube.haut)
 		for balise in self.robot.arene.balises:
-			self.draw_balise(balise.getCoords(), balise.haut, balise.larg)
+			self.draw_balise(balise.getCoords(), balise.haut)
 		longueur, largeur, hauteur = self.robot.getDimension()
 		p1,p2,p3,p4 = self.robot.getCoords()
-		p1 = (p1[0], p1[1], 0)
-		p2 = (p2[0], p2[1], 0)
-		p3 = (p3[0], p3[1], 0)
-		p4 = (p4[0], p4[1], 0)
+		z = 50
+		p1 = (p1[0], p1[1], z)
+		p2 = (p2[0], p2[1], z)
+		p3 = (p3[0], p3[1], z)
+		p4 = (p4[0], p4[1], z)
 		self.draw_cube((p1,p2,p3,p4), hauteur)
 
 	def draw_ground(self):
@@ -127,7 +128,7 @@ class Vue3D:
 			x+=1
 		glEnd()
 
-	def draw_balise(self, coords, height,width):
+	def draw_balise(self, coords, height):
 		p1,p2,p3,p4 = coords
 		#self.draw_cube(coords, height)
 		print(p1,p2,p3,p4)
@@ -168,7 +169,7 @@ class Vue3D:
 		glMatrixMode (GL_MODELVIEW)
 		glLoadIdentity()
 		#gluLookAt(x-ROBOT_LONGUEUR,z-ROBOT_HAUTEUR,y-ROBOT_LARGEUR,x-ROBOT_LONGUEUR-10*a,z-ROBOT_HAUTEUR,y-ROBOT_LARGEUR-10*b,0,1,0)
-		gluLookAt(x,z+5,y,x-10*a,0,y-10*b,0,1,0)
+		gluLookAt(x,z+50,y,x-10*a,55,y-10*b,0,1,0)
 		#gluLookAt(-10,0,-40+self.cpt,0,0,50,0,0,1)
 
 	def draw(self):
