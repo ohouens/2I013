@@ -11,7 +11,7 @@ class Balise(Cube):
 
     def __init__(self, x, y, z):
         """Constructeur de la classe Mur"""
-        Cube.__init__(self,x,y,z,100,100,100)
+        Cube.__init__(self,x,y,z,300,10,200)
 
     def safficher(self):
         """Methode d'affichage d'un mur au format :
