@@ -266,19 +266,20 @@ class Robot:
 
     def isRed(self, color):
         r,g,b = color
-        return r>250
-
+        return r>=b and b>=g 
     def isGreen(self, color):
         r,g,b = color
-        return g>250
-
+        return g>=r and r>=b 
     def isBlue(self, color):
         r,g,b = color
-        return b>250
-
+        return b>=g and g>=r 
     def isYellow(self, color):
         r,g,b = color
-        return r>250 and g>250
+        return math.fabs(r-g)<=20 and r>=b
+
+    def isNotColor(self,color):
+        r,g,b = color
+        return math.fabs(r-g)>=20 and math.fabs(g-b)>=20
 
     def detecter_balise(self, img):
         dist = 20
@@ -291,9 +292,9 @@ class Robot:
         i = 0
         j = 0
        # cible = (0,0)
-        while i<width:
+        while i<width-dist:
             j=0
-            while j<height:
+            while j<height-dist:
                 
                 list_couleur = ['r','g','b','y']
                 list_coin = [
@@ -309,18 +310,23 @@ class Robot:
                     while(iter < len(list_couleur)):
                         if('r' in list_couleur and self.isRed(list_coin[iter])):
                             list_couleur.remove('r')
+                            print('rouge')
                         elif('g' in list_couleur and self.isGreen(list_coin[iter])):
                             list_couleur.remove('g')
+                            print('green')
                         elif('b' in list_couleur and self.isBlue(list_coin[iter])):
                             list_couleur.remove('b')
+                            print('blue')
                         elif('y' in list_couleur and self.isYellow(list_coin[iter])):
                             list_couleur.remove('y')
+                            print('yellow')
                         else:
                             print('rien')
                         iter += 1
-                j+=dist
+                j+=dist/2
                 if(len(list_couleur) == 1):
                     print("Cible trouvée: pixel:",i,j)
+                    print("(r,g,b)",r1,g1,b1)
                     for x in range(dist):
                         for y in range(dist):
                             img.putpixel((i+x,j+y),(255,0,255))
@@ -329,7 +335,7 @@ class Robot:
                     #img.close()
 
                     return True
-            i+=dist
+            i+=dist/2
 
         print("Pas de cible")
         return False
