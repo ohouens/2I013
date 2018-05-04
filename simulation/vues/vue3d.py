@@ -2,6 +2,7 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+from cste import *
 import time
 import sys
 
@@ -25,52 +26,53 @@ class Vue3D:
 		glutCreateWindow(b"Simulation") 
 		glMatrixMode(GL_PROJECTION)
 		glLoadIdentity()
-		gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+		gluPerspective(130, (display[0]/display[1]), 0.1, 700.0)
 		glEnable(GL_DEPTH_TEST)
-		glTranslate(0,0,-3)
+		#glTranslate(0,0,-3)
 		glutDisplayFunc(self.draw)
 		glutIdleFunc(self.draw)
 		glutMainLoop()
 
 	def draw_arene(self):
-		self.draw_ground()
+		#self.draw_ground()
 		for cube in self.robot.arene.cubes:
 			self.draw_cube(cube.getCoords(), cube.haut)
 		for balise in self.robot.arene.balises:
 			self.draw_balise(balise.getCoords(), balise.haut, balise.larg)
 		longueur, largeur, hauteur = self.robot.getDimension()
-		self.draw_cube(self.robot.getCoords(), hauteur)
+		p1,p2,p3,p4 = self.robot.getCoords()
+		p1 = (p1[0], p1[1], 0)
+		p2 = (p2[0], p2[1], 0)
+		p3 = (p3[0], p3[1], 0)
+		p4 = (p4[0], p4[1], 0)
+		self.draw_cube((p1,p2,p3,p4), hauteur)
 
 	def draw_ground(self):
-		print("draw_ground")
-		verticies = (
-    		(-2000,-1,-2000),
-    		(-2000,-1,2000),
-    		(2000,-1,2000),
-    		(-2000,-1,2000)
+		verticies=(
+			(-2000, 0, -2000),
+			(2000, 0, -2000),
+			(2000, 0, 2000),
+			(-2000, 0, 2000)
+		)
+		colors = (
+    		(1,0,0),
     	)
-    	surfaces = (
+		surfaces = (
     		(0,1,2,3)
     	)
-    	#self.draw_cube(verticies, 1)
-    	"""glBegin(GL_QUADS)
-    	for surface in surfaces:
-       		for vertex in surface:
-           		glColor3fv(colors[x])
-            		glVertex3fv(verticies[vertex])
-    	glEnd()"""
+		self.draw_quad(verticies, surfaces, colors)
 
 	def draw_cube(self, coords, height):
 		p1, p2, p3, p4 =  coords
 		verticies=(
-			(p1[0], 0, p1[1]),
-			(p2[0], 0, p2[1]),
-			(p3[0], 0, p3[1]),
-			(p4[0], 0, p4[1]),
-			(p1[0], height, p1[1]),
-			(p2[0], height, p2[1]),
-			(p3[0], height, p3[1]),
-			(p4[0], height, p4[1]),
+			(p1[0], p1[2], p1[1]),
+			(p2[0], p2[2], p2[1]),
+			(p3[0], p3[2], p3[1]),
+			(p4[0], p4[2], p4[1]),
+			(p1[0], p1[2]+height, p1[1]),
+			(p2[0], p2[2]+height, p2[1]),
+			(p3[0], p3[2]+height, p3[1]),
+			(p4[0], p4[2]+height, p4[1]),
 		)
 		edges=(
 			(0,1),
@@ -162,10 +164,11 @@ class Vue3D:
 		#glViewport(0, 0, self.width, self.height)
 		#glMatrixMode(GL_PROJECTION)
 		#glLoadIdentity()
-		glOrtho(0.0, self.width, 0.0, self.width, 0.0, self.height)
+		glOrtho(-self.width, self.width, -self.width, self.width, -self.height, self.height)
 		glMatrixMode (GL_MODELVIEW)
 		glLoadIdentity()
-		gluLookAt(x,z,y,x-10*a,0,y-10*b,0,1,0)
+		#gluLookAt(x-ROBOT_LONGUEUR,z-ROBOT_HAUTEUR,y-ROBOT_LARGEUR,x-ROBOT_LONGUEUR-10*a,z-ROBOT_HAUTEUR,y-ROBOT_LARGEUR-10*b,0,1,0)
+		gluLookAt(x,z+5,y,x-10*a,0,y-10*b,0,1,0)
 		#gluLookAt(-10,0,-40+self.cpt,0,0,50,0,0,1)
 
 	def draw(self):
