@@ -34,8 +34,8 @@ class Cube():
         return self.larg, self.long, self.haut
 
     def getCoords(self):
-        p1 = self.x, self.y
-        p2 = self.x+self.larg, self.y
-        p3 = self.x+self.larg, self.y+self.long
-        p4 = self.x, self.y+self.long
+        p1 = self.x, self.y, self.z
+        p2 = self.x+self.larg, self.y, self.z
+        p3 = self.x+self.larg, self.y+self.long, self.z
+        p4 = self.x, self.y+self.long, self.z
         return p1, p2, p3, p4
