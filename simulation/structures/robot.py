@@ -264,55 +264,62 @@ class Robot:
         img.save("simulation/tmp/img{0}.jpeg".format(cpt))
         print("simulation/tmp/img{0}.jpeg".format(cpt))
 
+    def isRed(self, color):
+        r,g,b = color
+        return r>250
+
+    def isGreen(self, color):
+        r,g,b = color
+        return g>250
+
+    def isBlue(self, color):
+        r,g,b = color
+        return b>250
+
+    def isYellow(self, color):
+        r,g,b = color
+        return r>250 and g>250
+
     def detecter_balise(self, img):
-        dist = 10
+        dist = 20
         #nb_pixel= ((dist//4)*(dist//4))//2
-        nb_pixel= 3
+        nb_pixel= 2
         fenetre = (dist,dist)
         img = Image.open(img)
         width, height = img.size
-        cpt_r = 0
-        cpt_b = 0
-        cpt_g = 0
-        cpt_y = 0
-        v=0
+        
         i = 0
         j = 0
        # cible = (0,0)
         while i<width:
             j=0
             while j<height:
-                v=0
+                
+                list_couleur = ['r','g','b','y']
+                list_coin = [
+                    img.getpixel((i,j)),
+                    img.getpixel((i+dist,j)),
+                    img.getpixel((i,j+dist)),
+                    img.getpixel((i+dist,j+dist))
+                ]
                 print("{0},{1}".format(i,j))
-                for z in range(fenetre[0]):
-                    for k in range(fenetre[1]):
-                        r, g, b =img.getpixel((i+z,j+k))
-                        if(r>b and b>g and math.fabs(r-b)>=20 and (math.fabs(r-b)>=20 and math.fabs(r-g)>=20 and math.fabs(g-b)>=20)):
-                            cpt_r+=1
-                        elif(b>g and g>r and math.fabs(b-g)>=20 and (math.fabs(r-b)>=20 and math.fabs(r-g)>=20 and math.fabs(g-b)>=20)):
-                            cpt_b+=1
-                        elif(g>r and r>b and math.fabs(g-r)>=20 and (math.fabs(r-b)>=20 and math.fabs(r-g)>=20 and math.fabs(g-b)>=20)):
-                            cpt_g+=1
-                        elif(math.fabs(r-g)<=20 and r>b):
-                            cpt_y+=1
+                for k in list_coin:
+                    r1, g1, b1 = k
+                    iter = 0
+                    while(iter < len(list_couleur)):
+                        if('r' in list_couleur and self.isRed(list_coin[iter])):
+                            list_couleur.remove('r')
+                        elif('g' in list_couleur and self.isGreen(list_coin[iter])):
+                            list_couleur.remove('g')
+                        elif('b' in list_couleur and self.isBlue(list_coin[iter])):
+                            list_couleur.remove('b')
+                        elif('y' in list_couleur and self.isYellow(list_coin[iter])):
+                            list_couleur.remove('y')
+                        else:
+                            print('rien')
+                        iter += 1
                 j+=dist
-                print ("r=",cpt_r)
-                print ("b=",cpt_b)
-                print ("g=",cpt_g)
-                print ("y=",cpt_y)
-                #if(cpt_r>=nb_pixel and cpt_b>=nb_pixel and cpt_g>=nb_pixel and cpt_y>=nb_pixel):
-                if(cpt_r>=nb_pixel):
-                    v+=1
-                if(cpt_b>=nb_pixel):
-                    v+=1
-                if(cpt_y>=nb_pixel):
-                    v+=1
-                if(cpt_g>=nb_pixel):
-                    v+=1
-
-                print("v=", v)
-                if(v >= 3):
-                # cible = (i,j)
+                if(len(list_couleur) == 1):
                     print("Cible trouvée: pixel:",i,j)
                     for x in range(dist):
                         for y in range(dist):
@@ -322,18 +329,14 @@ class Robot:
                     #img.close()
 
                     return True
-                cpt_r = 0
-                cpt_y = 0
-                cpt_g = 0
-                cpt_b = 0
             i+=dist
 
         print("Pas de cible")
         return False
 
 def Creation_Robot(controler):
-	position = (30,30,0)
-	direction = (1,0)
+	position = (700+ROBOT_LARGEUR+ROBOT_LONGUEUR,1000,0)
+	direction = (0,-1)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
 	return Robot(position, direction, dimension, vitesse, controler)
