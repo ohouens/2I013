@@ -2,11 +2,14 @@
 import random
 import math
 import time
+import pyglet
 from cste import *
 from simulation.structures.teteRobot import TeteRobot
 from simulation.structures.teteRobot import Creation_TeteRobot
 from simulation.structures.arene import Arene
 from simulation.structures.arene import Creation_Arene
+#from PIL import ImageGrab
+import pyscreenshot as ImageGrab
 from PIL import Image
 
 class Robot:
@@ -230,8 +233,9 @@ class Robot:
 #---------------------------------------------------------------------------------       
 
     def get_image(self):
-        return True
-
+        img = ImageGrab.grab()
+        return img
+        
     def dist_image(self, img1, img2):
         """ retourne la distance entre deux images """
         
@@ -256,8 +260,9 @@ class Robot:
 
     def save_image(self, cpt):
         img = self.get_image()
-        imgpil = Image.fromarray(img)
-        imgpil.save("tmp/img{0}.jpeg".format(cpt))
+        #imgpil = Image.open(img)
+        img.save("simulation/tmp/img{0}.jpeg".format(cpt))
+        print("simulation/tmp/img{0}.jpeg".format(cpt))
 
     def detecter_balise(self, img):
         dist = 10
