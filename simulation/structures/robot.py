@@ -45,6 +45,7 @@ class Robot:
         p3 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
         p4 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
         self.coords = (p1, p2, p3, p4)
+        self.cible =(0,0)
 
         self.LED_LEFT_EYE = "LED_LEFT_EYE"
         self.LED_RIGHT_EYE = "LED_RIGHT_EYE"
@@ -262,6 +263,8 @@ class Robot:
     def save_image(self, cpt):
         img = self.get_image()
         #imgpil = Image.open(img)
+        #img = img.crop((0, 0, IMG_WIDTH, IMG_HEIGHT))
+        img = img.resize((IMG_WIDTH, IMG_HEIGHT))
         img.save("simulation/tmp/img{0}.jpeg".format(cpt))
         print("simulation/tmp/img{0}.jpeg".format(cpt))
 
@@ -306,7 +309,7 @@ class Robot:
                     img.getpixel((i,j+dist)),
                     img.getpixel((i+dist,j+dist))
                 ]
-                print("{0},{1}".format(i,j))
+                #print("{0},{1}".format(i,j))
                 cpt=0
                 for k in list_coin:
                     r1, g1, b1 = k
@@ -314,45 +317,44 @@ class Robot:
                     while(iter < len(list_couleur)):
                         if('r' in list_couleur and self.isRed(k)): #and self.isColor(list_coin[iter])):
                             list_couleur.remove('r')
-                            print('rouge')
-                            img.putpixel((i,j), (255,108,0))
+                            #print('rouge')
+                            #img.putpixel((i,j), (255,108,0))
                         if('g' in list_couleur and self.isGreen(k)):#and self.isColor(list_coin[iter])):
                             list_couleur.remove('g')
-                            print('green')
-                            img.putpixel((i,j), (0,177,100))
+                            #print('green')
+                            #img.putpixel((i,j), (0,177,100))
                         if('b' in list_couleur and self.isBlue(k)):#and self.isColor(list_coin[iter])):
                             list_couleur.remove('b')
-                            print('blue')
-                            img.putpixel((i,j), (210,0,255))
+                            #print('blue')
+                            #img.putpixel((i,j), (210,0,255))
                         if('y' in list_couleur and self.isYellow(k)):#and self.isColor(list_coin[iter])):
                             list_couleur.remove('y')
-                            print('yellow')
-                            img.putpixel((i,j), (255,255,255))
+                            #print('yellow')
+                            #img.putpixel((i,j), (255,255,255))
                         """else:
                             print('rien')
                             img.putpixel((i,j), (184,177,171))"""
-                        print(list_couleur)
                         iter += 1
                     if(len(list_couleur) == 1):
                         print("Cible trouvée: pixel:",i,j)
-                        print("(r,g,b)",r1,g1,b1)
+                        #print("(r,g,b)",r1,g1,b1)
                         for x in range(dist):
                             for y in range(dist):
                                 img.putpixel((i+x,j+y),(255,0,255))
                                 
-                        img.show()
+                        #img.show()
                         #img.close()
 
-                        return True
+                        return (True,(i,j))
                 j+=dist/2
             i+=dist/2
-        img.show()
+        #img.show()
 
         print("Pas de cible")
-        return False
+        return (False,(-1,-1))
 
 def Creation_Robot(controler):
-	position = (700+ROBOT_LARGEUR+ROBOT_LONGUEUR,1000,0)
+	position = (750,1000,0)
 	direction = (0,-1)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
