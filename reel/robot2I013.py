@@ -79,6 +79,88 @@ class Robot2I013(object):
         lastRight, LastLeft = last
         currentRight, currentLeft = current
         return math.fabs(currentRight-lastRight)*self.WHEEL_CIRCUMFERENCE/360
+#----------------------------------OVERRIDE---------------------------------------
+ def isRed(self, color):
+        r,g,b = color
+        return r>=b and b>=g
+        #return r>200 and b<20 and g<20
+    def isGreen(self, color):
+        r,g,b = color
+        return g>=r and r>=b 
+        #return g>200 and b<20 and r<20
+    def isBlue(self, color):
+        r,g,b = color
+        return b>=g and g>=r
+        #return b>200 and r<20 and g<20
+      
+    def isYellow(self, color):
+        r,g,b = color
+        return math.fabs(r-g)<=20
+        #return r>200 and g>200 and b<20
+    def isColor(self,color):
+        r,g,b = color
+        return math.fabs(r-g)>=30 and math.fabs(g-b)>=30
+
+    def detecter_balise(self, img):
+        dist = 20
+        fenetre = (dist,dist)
+        img = Image.open(img)
+        width, height = img.size
+        
+        i = 0
+        j = 0
+       # cible = (0,0)
+        while i<width-dist:
+            j=0
+            while j<height-dist:
+                
+                list_couleur = ['r','g','b','y']
+                list_coin = [
+                    img.getpixel((i,j)),
+                    img.getpixel((i+dist,j)),
+                    img.getpixel((i,j+dist)),
+                    img.getpixel((i+dist,j+dist))
+                ]
+                #print("{0},{1}".format(i,j))
+                cpt=0
+                for k in list_coin:
+                    r1, g1, b1 = k
+                    iter = 0
+                    while(iter < len(list_couleur)):
+                        if('r' in list_couleur and self.isRed(k)and self.isColor(list_coin[iter])):
+                            list_couleur.remove('r')
+                            #print('rouge')
+                            img.putpixel((i,j), (255,108,0))
+                        if('g' in list_couleur and self.isGreen(k)and self.isColor(list_coin[iter])):
+                            list_couleur.remove('g')
+                            #print('green')
+                            img.putpixel((i,j), (0,177,100))
+                        if('b' in list_couleur and self.isBlue(k)and self.isColor(list_coin[iter])):
+                            list_couleur.remove('b')
+                            #print('blue')
+                            img.putpixel((i,j), (210,0,255))
+                        if('y' in list_couleur and self.isYellow(k)and self.isColor(list_coin[iter])):
+                            list_couleur.remove('y')
+                            #print('yellow')
+                            img.putpixel((i,j), (255,255,255))
+                        """else:
+                            print('rien')
+                            img.putpixel((i,j), (184,177,171))"""
+                        iter += 1
+                    if(len(list_couleur) == 1):
+                        print("Cible trouvée: pixel:",i,j)
+                        #print("(r,g,b)",r1,g1,b1)
+                        for x in range(dist):
+                            for y in range(dist):
+                                img.putpixel((i+x,j+y),(255,0,255))
+                                
+                        #img.show()
+                        #img.close()
+
+                        return (True,(i,j))
+                j+=dist/2
+            i+=dist/2
+        #img.show()
 #--------------------------------------------------------------------------------
     def run(self,verbose=True):
         """ 
