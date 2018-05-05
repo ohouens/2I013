@@ -53,6 +53,7 @@ class Robot:
         self.LED_WIFI = "LED_WIFI"
         self.MOTOR_LEFT= "MOTOR_LEFT"
         self.MOTOR_RIGHT = "MOTOR_RIGHT"
+        
 #----------------------------------WRAPPER----------------------------------------
     def rotate(self, teta):
         self.rotation = teta
@@ -266,25 +267,27 @@ class Robot:
 
     def isRed(self, color):
         r,g,b = color
-        return r>=b and b>=g 
+        #return r>=b and b>=g 
+        return r>200 and b<20 and g<20
     def isGreen(self, color):
         r,g,b = color
-        return g>=r and r>=b 
+        #return g>=r and r>=b 
+        return g>200 and b<20 and r<20
     def isBlue(self, color):
         r,g,b = color
-        return b>=g and g>=r 
+        #return b>=g and g>=r
+        return b>200 and r<20 and g<20
+      
     def isYellow(self, color):
         r,g,b = color
-        return math.fabs(r-g)<=20 and r>=b
-
-    def isNotColor(self,color):
+        #return math.fabs(r-g)<=20
+        return r>200 and g>200 and b<20
+    def isColor(self,color):
         r,g,b = color
-        return math.fabs(r-g)>=20 and math.fabs(g-b)>=20
+        return math.fabs(r-g)>=10 and math.fabs(g-b)>=10
 
     def detecter_balise(self, img):
         dist = 20
-        #nb_pixel= ((dist//4)*(dist//4))//2
-        nb_pixel= 2
         fenetre = (dist,dist)
         img = Image.open(img)
         width, height = img.size
@@ -304,38 +307,46 @@ class Robot:
                     img.getpixel((i+dist,j+dist))
                 ]
                 print("{0},{1}".format(i,j))
+                cpt=0
                 for k in list_coin:
                     r1, g1, b1 = k
                     iter = 0
                     while(iter < len(list_couleur)):
-                        if('r' in list_couleur and self.isRed(list_coin[iter])):
+                        if('r' in list_couleur and self.isRed(k)): #and self.isColor(list_coin[iter])):
                             list_couleur.remove('r')
                             print('rouge')
-                        elif('g' in list_couleur and self.isGreen(list_coin[iter])):
+                            img.putpixel((i,j), (255,108,0))
+                        if('g' in list_couleur and self.isGreen(k)):#and self.isColor(list_coin[iter])):
                             list_couleur.remove('g')
                             print('green')
-                        elif('b' in list_couleur and self.isBlue(list_coin[iter])):
+                            img.putpixel((i,j), (0,177,100))
+                        if('b' in list_couleur and self.isBlue(k)):#and self.isColor(list_coin[iter])):
                             list_couleur.remove('b')
                             print('blue')
-                        elif('y' in list_couleur and self.isYellow(list_coin[iter])):
+                            img.putpixel((i,j), (210,0,255))
+                        if('y' in list_couleur and self.isYellow(k)):#and self.isColor(list_coin[iter])):
                             list_couleur.remove('y')
                             print('yellow')
-                        else:
+                            img.putpixel((i,j), (255,255,255))
+                        """else:
                             print('rien')
+                            img.putpixel((i,j), (184,177,171))"""
+                        print(list_couleur)
                         iter += 1
-                j+=dist/2
-                if(len(list_couleur) == 1):
-                    print("Cible trouvée: pixel:",i,j)
-                    print("(r,g,b)",r1,g1,b1)
-                    for x in range(dist):
-                        for y in range(dist):
-                            img.putpixel((i+x,j+y),(255,0,255))
-                            
-                    img.show()
-                    #img.close()
+                    if(len(list_couleur) == 1):
+                        print("Cible trouvée: pixel:",i,j)
+                        print("(r,g,b)",r1,g1,b1)
+                        for x in range(dist):
+                            for y in range(dist):
+                                img.putpixel((i+x,j+y),(255,0,255))
+                                
+                        img.show()
+                        #img.close()
 
-                    return True
+                        return True
+                j+=dist/2
             i+=dist/2
+        img.show()
 
         print("Pas de cible")
         return False
