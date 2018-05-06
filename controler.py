@@ -44,6 +44,18 @@ class TestControler(object):
             else:
                 self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 255)
                 self.robot.forward(45)
+              
+    def arriere(self, D):
+        self.robot.forward(-100)
+        self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
+        print("{0} > {1}\n".format(self.distance, D-(2*math.pi*(self.robot.WHEEL_DIAMETER/2))))
+        if(self.distance > D-(2*math.pi*(self.robot.WHEEL_DIAMETER/2))):
+            if(self.distance >= D):
+                self.robot.stop()
+                self.distance = 0
+                return True
+            else:
+                self.robot.forward(-25)
 
     def rotation(self, O, D):
         """
@@ -51,7 +63,10 @@ class TestControler(object):
             D en degré
         """
         self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 255, 0)
-        self.robot.rotate(300)
+        sens = 300
+        if(O == RIGHT):
+            sens = sens*(RIGHT)
+        self.robot.rotate(sens)
         self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
         print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)))
         if(self.distance > math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)):
