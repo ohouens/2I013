@@ -169,7 +169,7 @@ class Vue3D:
 		glMatrixMode (GL_MODELVIEW)
 		glLoadIdentity()
 		#gluLookAt(x-ROBOT_LONGUEUR,z-ROBOT_HAUTEUR,y-ROBOT_LARGEUR,x-ROBOT_LONGUEUR-10*a,z-ROBOT_HAUTEUR,y-ROBOT_LARGEUR-10*b,0,1,0)
-		gluLookAt(x,z+50,y,x-10*a,55,y-10*b,0,1,0)
+		gluLookAt(x,z+50,y,x-10*a,50,y-10*b,0,1,0)
 		#gluLookAt(-10,0,-40+self.cpt,0,0,50,0,0,1)
 
 	def draw(self):
