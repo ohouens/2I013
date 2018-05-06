@@ -18,7 +18,8 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        self.strategie = 6
+        #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise
+        self.strategie = 5
         self.tour = 0
         self.temoin = False 
         self.distance = 0
@@ -91,12 +92,11 @@ class TestControler(object):
         self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 0, 255)
 
     def update(self):
-        #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=detection de balise, 6=séries de photos, 7=suivi de balise
         print('\nStratégie: {0}'.format(self.strategie))
         self.currentPosition = self.robot.get_position()
         if(self.strategie == 0):
             self.robot.stop()
-            #exit(0)
+            exit(0)
         elif(self.strategie == 1):
             if(self.droit(700)):
                 self.strategie = 0
@@ -117,16 +117,16 @@ class TestControler(object):
         elif(self.strategie == 4):
             self.courbe(LEFT, -1)
         elif(self.strategie == 5):
-            print("photo")
-            self.robot.detecter_balise("simulation/tmp/img1.jpeg")
-            self.strategie = 0
-        elif(self.strategie == 6):
             if(not self.droit(700)):
                 if(self.cpt %10 == 0):
                     self.robot.save_image(self.cpt/10)
             else:
                 self.strategie = 0
             self.cpt += 1
+        elif(self.strategie == 6):
+            print("photo")
+            self.robot.detecter_balise("simulation/tmp/img1.jpeg")
+            self.strategie = 0
         elif(self.strategie == 7):
             if(self.cpt %10 == 0):
                 self.robot.save_image(self.cpt/10)
