@@ -8,8 +8,8 @@ from simulation.structures.teteRobot import TeteRobot
 from simulation.structures.teteRobot import Creation_TeteRobot
 from simulation.structures.arene import Arene
 from simulation.structures.arene import Creation_Arene
-#from PIL import ImageGrab
-import pyscreenshot as ImageGrab
+from PIL import ImageGrab
+#import pyscreenshot as ImageGrab
 from PIL import Image
 
 class Robot:
@@ -17,7 +17,7 @@ class Robot:
         Classe caractérisé par:
         Sa Position: triplet(x, y, z)
         Les coordonnees de ses 4 angles (xy0, xy1, xy2, xy3)
-        Sa direction: triplet(a, b)
+        Sa direction: doublet(a, b)
         Sa dimension(final): triplet(longueur, largeur, hauteur)
         Sa vitesse: entier
         Sa rotation: entier
@@ -45,7 +45,6 @@ class Robot:
         p3 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
         p4 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]+ROBOT_LARGEUR)
         self.coords = (p1, p2, p3, p4)
-        self.cible =(0,0)
 
         self.LED_LEFT_EYE = "LED_LEFT_EYE"
         self.LED_RIGHT_EYE = "LED_RIGHT_EYE"
@@ -159,8 +158,13 @@ class Robot:
     def rotation_bis(self,teta):
         """Effectue une rotation du robot (sur lui-même) de teta°"""
         angle = math.radians(teta)
+        x,y = self.getDirection()
         (x0,y0), (x1,y1), (x2,y2), (x3,y3) = self.coords
         
+        newX = x*math.cos(angle) - y*math.sin(angle)
+        newY = x*math.sin(angle) + y*math.cos(angle)
+        self.__setDirection((newX, newY))
+
         ctx0 = (x0-self.position[0])*math.cos(angle) - (y0-self.position[1])*math.sin(angle) + self.position[0]
         cty0 = (x0-self.position[0])*math.sin(angle) + (y0-self.position[1])*math.cos(angle) + self.position[1]
 
@@ -179,13 +183,6 @@ class Robot:
                       ((ctx3), (cty3))]
         
         self.setCoords(newcoords)   #maj coords des 4 points du robot
-        self.calcdir()              #maj direction du robot
-        
-
-    def calcdir(self):
-        """ Calcule la direction du robot (correspond a l'avant du robot) et retourne cette derniere sous la forme : (x, y) """
-        (x0,y0), (x1,y1), (x2,y2), (x3,y3) = self.coords
-        self.__setDirection(((x1-x0)/ROBOT_LONGUEUR, (y1-y0)/ROBOT_LARGEUR))
 
     def rotation_tete(self, teta):
         self.tete.rotation(teta)
@@ -331,9 +328,6 @@ class Robot:
                             list_couleur.remove('y')
                             #print('yellow')
                             #img.putpixel((i,j), (255,255,255))
-                        """else:
-                            print('rien')
-                            img.putpixel((i,j), (184,177,171))"""
                         iter += 1
                     if(len(list_couleur) == 1):
                         print("Cible trouvée: pixel:",i,j)
@@ -343,19 +337,18 @@ class Robot:
                                 img.putpixel((i+x,j+y),(255,0,255))
                                 
                         #img.show()
-                        #img.close()
 
                         return (True,(i,j))
-                j+=dist/2
-            i+=dist/2
+                j+=dist//2
+            i+=dist//2
         #img.show()
 
         print("Pas de cible")
         return (False,(-1,-1))
 
 def Creation_Robot(controler):
-	position = (750,1000,0)
-	direction = (0,-1)
+	position = (30,30,0)
+	direction = (1,0)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
 	return Robot(position, direction, dimension, vitesse, controler)
