@@ -22,7 +22,7 @@ class TestControler(object):
         self.tour = 0
         self.temoin = False 
         self.distance = 0
-        self.cpt=0
+        self.cpt=1
         self.vue = Vue3D(self)
 
     def droit(self, D):
@@ -76,7 +76,7 @@ class TestControler(object):
         self.robot.set_led(self.robot.LED_RIGHT_EYE, 255, 0, 255)
 
     def update(self):
-        #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos
+        #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=detection de balise, 6=séries de photos, 7=suivi de balise
         print('\nStratégie: {0}'.format(self.strategie))
         self.currentPosition = self.robot.get_position()
         if(self.strategie == 0):
@@ -103,12 +103,26 @@ class TestControler(object):
             self.courbe(LEFT, -1)
         elif(self.strategie == 5):
             print("photo")
-            self.robot.detecter_balise("reel/tmp/img4.jpeg")
+            self.robot.detecter_balise("simulation/tmp/img1.jpeg")
             self.strategie = 0
         elif(self.strategie == 6):
             if(not self.droit(700)):
                 if(self.cpt %10 == 0):
-                    self.robot.save_image(self.cpt)
+                    self.robot.save_image(self.cpt/10)
+            else:
+                self.strategie = 0
+            self.cpt += 1
+        elif(self.strategie == 7):
+            if(self.cpt %10 == 0):
+                self.robot.save_image(self.cpt/10)
+                detecte, cible = self.robot.detecter_balise("simulation/tmp/img{0}.jpeg".format(self.cpt/10))
+                if (detecte):
+                    if (cible[0]<IMG_WIDTH/3):
+                        self.rotation(LEFT,20)
+                    if (cible[0]>2*IMG_WIDTH/3):
+                        self.rotation(RIGHT,20)
+                    else: 
+                        self.droit(50)
             else:
                 self.strategie = 0
             self.cpt += 1
