@@ -34,7 +34,7 @@ class Vue3D:
 		glutMainLoop()
 
 	def draw_arene(self):
-		#self.draw_ground()
+		self.draw_ground()
 		for cube in self.robot.arene.cubes:
 			self.draw_cube(cube.getCoords(), cube.haut)
 		for balise in self.robot.arene.balises:
@@ -55,13 +55,11 @@ class Vue3D:
 			(2000, 0, 2000),
 			(-2000, 0, 2000)
 		)
-		colors = (
-    		(1,0,0),
-    	)
-		surfaces = (
-    		(0,1,2,3)
-    	)
-		self.draw_quad(verticies, surfaces, colors)
+		glBegin(GL_QUADS)
+		for vertex in verticies:
+			glColor3fv((1,1,1))
+			glVertex3fv(vertex)
+		glEnd()
 
 	def draw_cube(self, coords, height):
 		p1, p2, p3, p4 =  coords
@@ -134,14 +132,14 @@ class Vue3D:
 		print(p1,p2,p3,p4)
 		verticies = (
 			(p1[0], 			0, 			p1[1]),				#0
-			((p1[0]+p2[0])/2, 	0, 			(p1[1]+p2[1])/2),	#1
-			(p2[0], 			0, 			p2[1]),				#2
-			(p2[0], 			height/2, 	p2[1]),				#3
-			(p2[0], 			height, 	p2[1]),				#4
-			((p1[0]+p2[0])/2, 	height, 	(p1[1]+p2[1])/2),	#5
+			((p1[0]+p4[0])/2, 	0, 			(p1[1]+p4[1])/2),	#1
+			(p4[0], 			0, 			p4[1]),				#2
+			(p4[0], 			height/2, 	p4[1]),				#3
+			(p4[0], 			height, 	p4[1]),				#4
+			((p1[0]+p4[0])/2, 	height, 	(p1[1]+p4[1])/2),	#5
 			(p1[0], 			height, 	p1[1]),				#6
 			(p1[0], 			height/2, 	p1[1]),				#7
-			((p1[0]+p2[0])/2, 	height/2, 	(p1[1]+p2[1])/2)	#8
+			((p1[0]+p4[0])/2, 	height/2, 	(p1[1]+p4[1])/2)	#8
 		)
 		surfaces = (
 			(0, 1, 8, 7),
