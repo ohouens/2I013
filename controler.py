@@ -5,11 +5,9 @@ from simulation.structures.robot import Creation_Robot
 from simulation.vues.vue2d import Vue2D
 from simulation.vues.vue3d import Vue3D
 from cste import *
-import pyglet
 import time
 import numpy as np
 import math
-from pyglet.gl import *
 
 class TestControler(object):
     def __init__(self):
@@ -19,12 +17,12 @@ class TestControler(object):
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
         #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise
-        self.strategie = 5
+        self.strategie = 4
         self.tour = 0
         self.temoin = False 
         self.distance = 0
         self.cpt=1
-        self.vue = Vue3D(self)
+        self.vue = Vue2D(self)
 
     def droit(self, D):
         """
@@ -81,8 +79,17 @@ class TestControler(object):
             Effectue une courbe vers un sens de rotation O jusqu'a une certaine distance D
             D en mm
         """
-        self.robot.forward(50)
-        self.robot.rotate(50)
+        sens = 50
+        if(O == RIGHT):
+            sens = sens*RIGHT
+        self.robot.forward(100)
+        self.robot.rotate(sens)
+        self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
+        print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)))
+        if(self.distance > math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)):
+            self.robot.stop()
+            self.distance = 0
+            return True
 
     def initialisation(self):
         """
@@ -115,7 +122,8 @@ class TestControler(object):
             else:
                 self.strategie = 0
         elif(self.strategie == 4):
-            self.courbe(LEFT, -1)
+            if(self.courbe(LEFT, 359)):
+                self.strategie = 0
         elif(self.strategie == 5):
             if(not self.droit(700)):
                 if(self.cpt %10 == 0):
@@ -138,8 +146,8 @@ class TestControler(object):
                         self.rotation(RIGHT,20)
                     else: 
                         self.droit(50)
-            else:
-                self.strategie = 0
+            #else:
+                #self.strategie = 0
             self.cpt += 1
 
         else:
