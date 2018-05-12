@@ -73,14 +73,43 @@ class Robot2I013(object):
 
     def get_position(self):
         return self.get_motor_position()
-        
 
+    def get_image(self):
+        stream = BytesIO()
+        self.camera.capture(stream,format="jpeg")
+        stream.seek(0)
+        img= Image.open(stream).copy()
+        stream.close()
+        return img
+    
+    def dist_image(self, img1):
+        """ retourne la distance entre deux images """
+        
+        img = self.getimage()
+        width, height = img.size
+        img2 = img.crop((x, y, larg, haut))
+        img2 = img.resize((width, height))
+        distance = 0
+
+        for i in range(width):
+            for j in range(height):
+                r1, g1, b1 = img1.getpixel((i, j))
+                r2, g2, b2 = img.getpixel((i, j))
+                distance += ((r2-r1)**2+(g2-g1)**2+(b2-b1)**2)
+
+        return distance
+
+    def save_image(self, cpt):
+        img = self.getimage()
+        imgpil = Image.fromarray(img)
+        imgpil.save("tmp/img{0}.jpeg".format(cpt))
+        
     def distance(self, last, current):
         lastRight, LastLeft = last
         currentRight, currentLeft = current
         return math.fabs(currentRight-lastRight)*self.WHEEL_CIRCUMFERENCE/360
-#----------------------------------OVERRIDE---------------------------------------
- def isRed(self, color):
+
+    def isRed(self, color):
         r,g,b = color
         return r>=b and b>=g
         #return r>200 and b<20 and g<20
@@ -264,37 +293,8 @@ class Robot2I013(object):
         :param int position: Angle de rotation, de **0** a **180** degres, 90 pour le milieu.
         """
         self.servo.rotate_servo(position)
+
     def stop(self):
         """ Arrete le robot """
         self.set_motor_dps(self.MOTOR_LEFT+self.MOTOR_RIGHT,0)
         self.set_led(self.LED_LEFT_BLINKER+self.LED_LEFT_EYE+self.LED_LEFT_BLINKER+self.LED_RIGHT_EYE+self.LED_WIFI,0,0,0)
-
-    def get_image(self):
-        stream = BytesIO()
-        self.camera.capture(stream,format="jpeg")
-        stream.seek(0)
-        img= Image.open(stream).copy()
-        stream.close()
-        return img
-    
-    def dist_image(self, img1):
-        """ retourne la distance entre deux images """
-        
-        img = self.getimage()
-        width, height = img.size
-        img2 = img.crop((x, y, larg, haut))
-        img2 = img.resize((width, height))
-        distance = 0
-
-        for i in range(width):
-            for j in range(height):
-                r1, g1, b1 = img1.getpixel((i, j))
-                r2, g2, b2 = img.getpixel((i, j))
-                distance += ((r2-r1)**2+(g2-g1)**2+(b2-b1)**2)
-
-        return distance
-
-    def save_image(self, cpt):
-        img = self.getimage()
-        imgpil = Image.fromarray(img)
-        imgpil.save("tmp/img{0}.jpeg".format(cpt))
