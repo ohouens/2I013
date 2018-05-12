@@ -88,7 +88,6 @@ class Robot:
     	print("distance: {0}".format(math.sqrt((x2-x1)**2+(y2-y1)**2)))
     	return math.sqrt((x2-x1)**2+(y2-y1)**2)
 
-
     def run(self,verbose=True):
     	if verbose:
     		print("Starting ... (with %f FPS  -- %f sleep)" % (self.fps,1./self.fps))
@@ -108,6 +107,121 @@ class Robot:
     	self.stop()
     	if verbose:
         	print("Stoping ... total duration : %f (%f /loop)" % (time.time()-tstart,(time.time()-tstart)/cpt))
+
+    def get_image(self):
+        img = ImageGrab.grab()
+        return img
+        
+    def dist_image(self, img1, img2):
+        """ retourne la distance entre deux images """
+        
+        #img = self.getimage()
+        img1= Image.open(img1)
+        img2= Image.open(img2)
+
+        width, height = img1.size
+        #img2 = img1.crop((10, 10, width, height))
+        #img2 = img2.resize((width, height))
+        #img1 = img1.resize((width,height))
+        distance = 0
+
+        for i in range(width):
+            for j in range(height):
+                r1, g1, b1 = img1.getpixel((i, j))
+                r2, g2, b2 = img2.getpixel((i, j))
+                distance += ((r2-r1)**2+(g2-g1)**2+(b2-b1)**2)
+                print("distance:",distance)
+
+        return distance
+
+    def save_image(self, cpt):
+        img = self.get_image()
+        #imgpil = Image.open(img)
+        #img = img.crop((0, 0, IMG_WIDTH, IMG_HEIGHT))
+        img = img.resize((IMG_WIDTH, IMG_HEIGHT))
+        img.save("simulation/tmp/img{0}.jpeg".format(cpt))
+        print("simulation/tmp/img{0}.jpeg".format(cpt))
+
+    def isRed(self, color):
+        r,g,b = color
+        #return r>=b and b>=g 
+        return r>200 and b<20 and g<20
+    def isGreen(self, color):
+        r,g,b = color
+        #return g>=r and r>=b 
+        return g>200 and b<20 and r<20
+    def isBlue(self, color):
+        r,g,b = color
+        #return b>=g and g>=r
+        return b>200 and r<20 and g<20
+      
+    def isYellow(self, color):
+        r,g,b = color
+        #return math.fabs(r-g)<=20
+        return r>200 and g>200 and b<20
+    def isColor(self,color):
+        r,g,b = color
+        return math.fabs(r-g)>=10 and math.fabs(g-b)>=10
+
+    def detecter_balise(self, img):
+        dist = 20
+        fenetre = (dist,dist)
+        img = Image.open(img)
+        width, height = img.size
+        
+        i = 0
+        j = 0
+       # cible = (0,0)
+        while i<width-dist:
+            j=0
+            while j<height-dist:
+                
+                list_couleur = ['r','g','b','y']
+                list_coin = [
+                    img.getpixel((i,j)),
+                    img.getpixel((i+dist,j)),
+                    img.getpixel((i,j+dist)),
+                    img.getpixel((i+dist,j+dist))
+                ]
+                #print("{0},{1}".format(i,j))
+                cpt=0
+                for k in list_coin:
+                    r1, g1, b1 = k
+                    iter = 0
+                    while(iter < len(list_couleur)):
+                        if('r' in list_couleur and self.isRed(k)): #and self.isColor(list_coin[iter])):
+                            list_couleur.remove('r')
+                            #print('rouge')
+                            #img.putpixel((i,j), (255,108,0))
+                        if('g' in list_couleur and self.isGreen(k)):#and self.isColor(list_coin[iter])):
+                            list_couleur.remove('g')
+                            #print('green')
+                            #img.putpixel((i,j), (0,177,100))
+                        if('b' in list_couleur and self.isBlue(k)):#and self.isColor(list_coin[iter])):
+                            list_couleur.remove('b')
+                            #print('blue')
+                            #img.putpixel((i,j), (210,0,255))
+                        if('y' in list_couleur and self.isYellow(k)):#and self.isColor(list_coin[iter])):
+                            list_couleur.remove('y')
+                            #print('yellow')
+                            #img.putpixel((i,j), (255,255,255))
+                        iter += 1
+                    if(len(list_couleur) == 1):
+                        print("Cible trouvée: pixel:",i,j)
+                        #print("(r,g,b)",r1,g1,b1)
+                        for x in range(dist):
+                            for y in range(dist):
+                                img.putpixel((i+x,j+y),(255,0,255))
+                                
+                        #img.show()
+
+                        return (True,(i,j))
+                j+=dist//2
+            i+=dist//2
+        #img.show()
+
+        print("Pas de cible")
+        return (False,(-1,-1))
 #--------------------z------------------------------------------------------------
     def move_bis(self):
         x, y, z = self.position
@@ -228,123 +342,6 @@ class Robot:
 
     def setCoords(self, coords):
         self.coords = coords
-        
-#---------------------------------------------------------------------------------       
-
-    def get_image(self):
-        img = ImageGrab.grab()
-        return img
-        
-    def dist_image(self, img1, img2):
-        """ retourne la distance entre deux images """
-        
-        #img = self.getimage()
-        img1= Image.open(img1)
-        img2= Image.open(img2)
-
-        width, height = img1.size
-        #img2 = img1.crop((10, 10, width, height))
-        #img2 = img2.resize((width, height))
-        #img1 = img1.resize((width,height))
-        distance = 0
-
-        for i in range(width):
-            for j in range(height):
-                r1, g1, b1 = img1.getpixel((i, j))
-                r2, g2, b2 = img2.getpixel((i, j))
-                distance += ((r2-r1)**2+(g2-g1)**2+(b2-b1)**2)
-                print("distance:",distance)
-
-        return distance
-
-    def save_image(self, cpt):
-        img = self.get_image()
-        #imgpil = Image.open(img)
-        #img = img.crop((0, 0, IMG_WIDTH, IMG_HEIGHT))
-        img = img.resize((IMG_WIDTH, IMG_HEIGHT))
-        img.save("simulation/tmp/img{0}.jpeg".format(cpt))
-        print("simulation/tmp/img{0}.jpeg".format(cpt))
-
-    def isRed(self, color):
-        r,g,b = color
-        #return r>=b and b>=g 
-        return r>200 and b<20 and g<20
-    def isGreen(self, color):
-        r,g,b = color
-        #return g>=r and r>=b 
-        return g>200 and b<20 and r<20
-    def isBlue(self, color):
-        r,g,b = color
-        #return b>=g and g>=r
-        return b>200 and r<20 and g<20
-      
-    def isYellow(self, color):
-        r,g,b = color
-        #return math.fabs(r-g)<=20
-        return r>200 and g>200 and b<20
-    def isColor(self,color):
-        r,g,b = color
-        return math.fabs(r-g)>=10 and math.fabs(g-b)>=10
-
-    def detecter_balise(self, img):
-        dist = 20
-        fenetre = (dist,dist)
-        img = Image.open(img)
-        width, height = img.size
-        
-        i = 0
-        j = 0
-       # cible = (0,0)
-        while i<width-dist:
-            j=0
-            while j<height-dist:
-                
-                list_couleur = ['r','g','b','y']
-                list_coin = [
-                    img.getpixel((i,j)),
-                    img.getpixel((i+dist,j)),
-                    img.getpixel((i,j+dist)),
-                    img.getpixel((i+dist,j+dist))
-                ]
-                #print("{0},{1}".format(i,j))
-                cpt=0
-                for k in list_coin:
-                    r1, g1, b1 = k
-                    iter = 0
-                    while(iter < len(list_couleur)):
-                        if('r' in list_couleur and self.isRed(k)): #and self.isColor(list_coin[iter])):
-                            list_couleur.remove('r')
-                            #print('rouge')
-                            #img.putpixel((i,j), (255,108,0))
-                        if('g' in list_couleur and self.isGreen(k)):#and self.isColor(list_coin[iter])):
-                            list_couleur.remove('g')
-                            #print('green')
-                            #img.putpixel((i,j), (0,177,100))
-                        if('b' in list_couleur and self.isBlue(k)):#and self.isColor(list_coin[iter])):
-                            list_couleur.remove('b')
-                            #print('blue')
-                            #img.putpixel((i,j), (210,0,255))
-                        if('y' in list_couleur and self.isYellow(k)):#and self.isColor(list_coin[iter])):
-                            list_couleur.remove('y')
-                            #print('yellow')
-                            #img.putpixel((i,j), (255,255,255))
-                        iter += 1
-                    if(len(list_couleur) == 1):
-                        print("Cible trouvée: pixel:",i,j)
-                        #print("(r,g,b)",r1,g1,b1)
-                        for x in range(dist):
-                            for y in range(dist):
-                                img.putpixel((i+x,j+y),(255,0,255))
-                                
-                        #img.show()
-
-                        return (True,(i,j))
-                j+=dist//2
-            i+=dist//2
-        #img.show()
-
-        print("Pas de cible")
-        return (False,(-1,-1))
 
 def Creation_Robot(controler):
 	position = (30,30,0)
