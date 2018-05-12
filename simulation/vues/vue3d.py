@@ -6,7 +6,7 @@ from cste import *
 import time
 import sys
 
-display = (400,400)
+display = (1000,500)
 
 class Vue3D:
 	def __init__(self, controler):
@@ -24,7 +24,7 @@ class Vue3D:
 		glutInitWindowSize(display[0], display[1])
 		glutInitWindowPosition(0, 0)
 		glutCreateWindow(b"Simulation")
-		glutFullScreen()
+		#glutFullScreen()
 		glMatrixMode(GL_PROJECTION)
 		glLoadIdentity()
 		gluPerspective(70, (display[0]/display[1]), 0.1, 700.0)
@@ -57,7 +57,7 @@ class Vue3D:
 		)
 		glBegin(GL_QUADS)
 		for vertex in verticies:
-			glColor3fv((1,1,1))
+			glColor3fv((0.2,0.2,0.2))
 			glVertex3fv(vertex)
 		glEnd()
 
