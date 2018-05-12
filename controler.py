@@ -16,13 +16,13 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise
+        #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise, 8=contourner obstacle
         self.strategie = 4
         self.tour = 0
         self.temoin = False 
         self.distance = 0
         self.cpt=1
-        self.vue = Vue2D(self)
+        self.vue = Vue3D(self)
 
     def droit(self, D):
         """
@@ -85,6 +85,8 @@ class TestControler(object):
         self.robot.forward(100)
         self.robot.rotate(sens)
         self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
+        if(self.distance == 0):
+            self.distance = 1
         print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)))
         if(self.distance > math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)):
             self.robot.stop()
@@ -122,7 +124,7 @@ class TestControler(object):
             else:
                 self.strategie = 0
         elif(self.strategie == 4):
-            if(self.courbe(LEFT, 359)):
+            if(self.courbe(LEFT, 4000)):
                 self.strategie = 0
         elif(self.strategie == 5):
             if(not self.droit(700)):
