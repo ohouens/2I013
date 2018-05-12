@@ -16,13 +16,13 @@ class TestControler(object):
         self.stop = False
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
-        #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise, 8=contourner obstacle
+        #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise, 8=double cercle
         self.strategie = 4
         self.tour = 0
         self.temoin = False 
         self.distance = 0
         self.cpt=1
-        self.vue = Vue3D(self)
+        self.vue = Vue2D(self)
 
     def droit(self, D):
         """
@@ -124,7 +124,7 @@ class TestControler(object):
             else:
                 self.strategie = 0
         elif(self.strategie == 4):
-            if(self.courbe(LEFT, 4000)):
+            if(self.courbe(RIGHT, 2900)):
                 self.strategie = 0
         elif(self.strategie == 5):
             if(not self.droit(700)):
@@ -151,7 +151,13 @@ class TestControler(object):
             #else:
                 #self.strategie = 0
             self.cpt += 1
-
+        elif(self.strategie == 8):
+            if(self.temoin):
+                if(self.courbe(RIGHT, 2900)):
+                    self.temoin = False
+            else:
+                if(self.courbe(LEFT, 3400)):
+                    self.temoin = True
         else:
             print("rien")
         self.lastPosition = self.currentPosition
