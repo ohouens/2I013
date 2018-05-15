@@ -71,6 +71,14 @@ class Robot2I013(object):
     def forward(self, speed):
         self.set_motor_dps(self.MOTOR_LEFT+self.MOTOR_RIGHT,speed)
 
+    def curve(self, O, rayon):
+        if(O == RIGHT):
+            set_motor_dps(self.MOTOR_RIGHT, rayon)
+            set_motor_dps(self.MOTOR_LEFT, rayon*2)
+        else:
+            set_motor_dps(self.MOTOR_RIGHT, rayon*2)
+            set_motor_dps(self.MOTOR_LEFT, rayon)            
+
     def get_position(self):
         return self.get_motor_position()
 
