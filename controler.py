@@ -17,7 +17,7 @@ class TestControler(object):
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
         #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise, 8=double cercle
-        self.strategie = 4
+        self.strategie = 8
         self.tour = 0
         self.temoin = False 
         self.distance = 0
@@ -79,16 +79,10 @@ class TestControler(object):
             Effectue une courbe vers un sens de rotation O jusqu'a une certaine distance D
             D en mm
         """
-        sens = 50
-        if(O == RIGHT):
-            sens = sens*RIGHT
-        self.robot.forward(100)
-        self.robot.rotate(sens)
+        self.robot.curve(O, 50)
         self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
-        if(self.distance == 0):
-            self.distance = 1
-        print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)))
-        if(self.distance > math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)):
+        print("{0} > {1}".format(self.distance, math.pi*(self.robot.WHEEL_CIRCUMFERENCE)*D))
+        if(self.distance > math.pi*(self.robot.WHEEL_CIRCUMFERENCE)*D):
             self.robot.stop()
             self.distance = 0
             return True
@@ -124,7 +118,7 @@ class TestControler(object):
             else:
                 self.strategie = 0
         elif(self.strategie == 4):
-            if(self.courbe(RIGHT, 2900)):
+            if(self.courbe(LEFT, 1.2)):
                 self.strategie = 0
         elif(self.strategie == 5):
             if(not self.droit(700)):
@@ -153,10 +147,10 @@ class TestControler(object):
             self.cpt += 1
         elif(self.strategie == 8):
             if(self.temoin):
-                if(self.courbe(RIGHT, 2900)):
+                if(self.courbe(RIGHT, 1.02)):
                     self.temoin = False
             else:
-                if(self.courbe(LEFT, 3400)):
+                if(self.courbe(LEFT, 1.2)):
                     self.temoin = True
         else:
             print("rien")
