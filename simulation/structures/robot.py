@@ -2,14 +2,13 @@
 import random
 import math
 import time
-import pyglet
 from cste import *
 from simulation.structures.teteRobot import TeteRobot
 from simulation.structures.teteRobot import Creation_TeteRobot
 from simulation.structures.arene import Arene
 from simulation.structures.arene import Creation_Arene
-from PIL import ImageGrab
-#import pyscreenshot as ImageGrab
+#from PIL import ImageGrab
+import pyscreenshot as ImageGrab
 from PIL import Image
 
 class Robot:
@@ -64,6 +63,12 @@ class Robot:
         self.setVitesse(speed)
         self.rotation = 0
         print(self.toString())
+
+    def curve(self, O, rayon):
+        if(O == RIGHT):
+            rayon = rayon*RIGHT
+        self.forward(100)
+        self.rotate(rayon)
 
     def stop(self):
         self.setVitesse(0)
@@ -344,7 +349,7 @@ class Robot:
         self.coords = coords
 
 def Creation_Robot(controler):
-	position = (30,30,0)
+	position = (500,500,0)
 	direction = (1,0)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
