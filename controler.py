@@ -21,7 +21,8 @@ class TestControler(object):
         self.tour = 0
         self.temoin = False 
         self.distance = 0
-        self.cpt=1
+        self.cpt = 1
+        self.save = 0
         self.vue = Vue2D(self)
 
     def droit(self, D):
@@ -97,6 +98,9 @@ class TestControler(object):
     def update(self):
         print('\nStratégie: {0}'.format(self.strategie))
         self.currentPosition = self.robot.get_position()
+        if(self.robot.get_distance() <= 100):
+            self.save = self.strategie
+            self.strategie = 403
         if(self.strategie == 0):
             self.robot.stop()
             exit(0)
@@ -152,6 +156,11 @@ class TestControler(object):
             else:
                 if(self.courbe(LEFT, 1.2)):
                     self.temoin = True
+        elif(self.strategie == 403):
+            self.robot.stop()
+            print('stop')
+            if(self.robot.get_distance() > 100):
+                self.strategie = self.save
         else:
             print("rien")
         self.lastPosition = self.currentPosition
