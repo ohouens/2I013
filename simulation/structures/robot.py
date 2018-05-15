@@ -35,7 +35,7 @@ class Robot:
         self.dimension = dimension
         self.vitesse = vitesse
         self.rotation = 0
-        self.tete = Creation_TeteRobot()
+        self.tete = TeteRobot((1,0))
         self.arene = Creation_Arene()
         self.fps = fps
 
@@ -84,6 +84,20 @@ class Robot:
     	#print("x: {0}, y:{1}".format(x, y))
     	p1, p2, p3, p4 = self.getCoords()
     	return p2[0], p2[1]
+
+    def get_distance(self):
+        p1, p2, p3, p4 = self.getCoords()
+        vx, vy = self.tete.getOrientation()
+        for i in range(0,10):
+            a = (p1[0]+p2[0])/2 + i*vx
+            b = (p1[1]+p2[1])/2 + i*vy
+            print("({0}, {1})".format(a,b))
+            if(self.tete.isCube((a, b, 0), self.arene.cubes)):
+                return (math.sqrt(
+                        ((p1[0]+p2[0])/2+i*vx - (p1[0]+p2[0])/2)**2 +
+                        ((p1[1]+p2[1])/2+i*vy - (p1[1]+p2[1])/2)**2
+                ))
+        return 8190
 
     def distance(self, last, current):
     	x1, y1 = last
