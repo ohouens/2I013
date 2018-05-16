@@ -17,7 +17,7 @@ class TestControler(object):
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
         #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise, 8=double cercle
-        self.strategie = 8
+        self.strategie = 1
         self.tour = 0
         self.temoin = False 
         self.distance = 0
