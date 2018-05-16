@@ -368,7 +368,7 @@ class Robot:
         self.coords = coords
 
 def Creation_Robot(controler):
-	position = (500,300,0)
+	position = (500,299,0)
 	direction = (1,0)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
