@@ -93,8 +93,8 @@ class Robot:
         for i in range(0,100):
             self.points = []
             for j in range(0,10):
-                a = (p1[0]+p2[0])/2 + vx*(i+va)
-                b = (p1[1]+p2[1]+j)/2 + vy*(i+vb)
+                a = (p1[0]+p2[0])/2 + i*va
+                b = (p1[1]+p2[1]+j)/2 + i*vb
                 self.points.append((a, b, 0))
                 #print("({0}, {1})".format(a,b))
                 if(self.tete.isCube((a, b, 0), self.arene.cubes+self.arene.balises)):
@@ -368,7 +368,7 @@ class Robot:
         self.coords = coords
 
 def Creation_Robot(controler):
-	position = (500,500,0)
+	position = (500,300,0)
 	direction = (1,0)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
