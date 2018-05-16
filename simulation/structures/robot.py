@@ -38,6 +38,7 @@ class Robot:
         self.tete = TeteRobot((1,0))
         self.arene = Creation_Arene()
         self.fps = fps
+        self.points = []
 
         p1 = (self.position[0]-ROBOT_LONGUEUR, self.position[1]-ROBOT_LARGEUR)
         p2 = (self.position[0]+ROBOT_LONGUEUR, self.position[1]-ROBOT_LARGEUR)
@@ -90,14 +91,17 @@ class Robot:
         va, vb, = self.getDirection()
         vx, vy = self.tete.getOrientation()
         for i in range(0,100):
-            a = (p1[0]+p2[0])/2 + vx*(i+va)
-            b = (p1[1]+p2[1])/2 + vy*(i+vb)
-            #print("({0}, {1})".format(a,b))
-            if(self.tete.isCube((a, b, 0), self.arene.cubes+self.arene.balises)):
-                return (math.sqrt(
-                        ((p1[0]+p2[0])/2+i*vx - (p1[0]+p2[0])/2)**2 +
-                        ((p1[1]+p2[1])/2+i*vy - (p1[1]+p2[1])/2)**2
-                ))
+            self.points = []
+            for j in range(0,10):
+                a = (p1[0]+p2[0])/2 + vx*(i+va)
+                b = (p1[1]+p2[1]+j)/2 + vy*(i+vb)
+                self.points.append((a, b, 0))
+                #print("({0}, {1})".format(a,b))
+                if(self.tete.isCube((a, b, 0), self.arene.cubes+self.arene.balises)):
+                    return (math.sqrt(
+                            ((p1[0]+p2[0])/2+i*vx - (p1[0]+p2[0])/2)**2 +
+                            ((p1[1]+p2[1])/2+i*vy - (p1[1]+p2[1])/2)**2
+                    ))
         return 8190
 
     def distance(self, last, current):
@@ -364,7 +368,7 @@ class Robot:
         self.coords = coords
 
 def Creation_Robot(controler):
-	position = (30,50,0)
+	position = (500,500,0)
 	direction = (1,0)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
