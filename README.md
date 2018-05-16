@@ -17,7 +17,7 @@ TUTORIEL<br/>&nbsp;&nbsp;&nbsp;&nbsp;
   La vue pour la simulation peut etre:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     Debranché<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     En 2D<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    En 3d<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    En 3D<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 AVERTISSEMENT<br/>&nbsp;&nbsp;&nbsp;&nbsp;
   En vue 2D la direction de départ du robot doit être de (1,0)
