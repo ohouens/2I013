@@ -2,6 +2,8 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+from simulation.basiques.cube import Cube
+from cste import *
 import time
 import sys
 
@@ -31,9 +33,10 @@ class Vue2D:
 	def draw_robot(self):
 		p1, p2, p3, p4 = self.robot.getCoords()
 		self.draw_quad(self.robot.getCoords())
-		#self.draw_quad(self.robot.leftWheel().getCoords())
-		#self.draw_quad(self.robot.rightWheel().getCoords())
-		#self.draw_quad(self.robot.head().getCoords())
+		for point in self.robot.points:
+			a, b, c = point
+			point = Cube(a, b, 0, 1, 1, 1)
+			self.draw_quad(point.getCoords())
 
 
 	def draw_quad(self, coords):
