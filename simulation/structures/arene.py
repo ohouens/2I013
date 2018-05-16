@@ -78,6 +78,6 @@ def Creation_Arene() :
     arene.append(Cube(730+ROBOT_LONGUEUR, 15+ROBOT_LARGEUR, 0, 2, 20, 1))
     arene.append(Cube(0, 0, 0, 1, 1, 1))
     #arene.append(Cube(0, 0, -70, 10, 10, 10))
-    #arene.append(Cube(0, 25, 0, 100, 100, 100))
+    arene.append(Cube(500, 25, 0, 100, 100, 100))
     arene.append(Balise(700, 0, 0))
     return arene
