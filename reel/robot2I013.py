@@ -306,3 +306,6 @@ class Robot2I013(object):
         """ Arrete le robot """
         self.set_motor_dps(self.MOTOR_LEFT+self.MOTOR_RIGHT,0)
         self.set_led(self.LED_LEFT_BLINKER+self.LED_LEFT_EYE+self.LED_LEFT_BLINKER+self.LED_RIGHT_EYE+self.LED_WIFI,0,0,0)
+
+def Creation_Robot(controler):
+    return Robot2I013(controler)
