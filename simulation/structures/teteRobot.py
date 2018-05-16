@@ -37,9 +37,9 @@ class TeteRobot:
         """
         return "[Tete] direction: {0}".format(self.orientation)
 
-    def isCube(self, point, cubes):
+    def isCube(self, point, obj):
         x,y,z = point
-        for i in cubes:
+        for i in obj:
             p1, p2, p3, p4 = i.getCoords()
             if(x > p1[0] and y > p1[1] and x < p2[0] and y > p2[1] and x < p3[0] and y < p3[1] and x > p4[0] and y < p4[1]):
                 return True
