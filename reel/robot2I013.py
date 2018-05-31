@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 import math
 from easygopigo3 import EasyGoPiGo3,Servo,DistanceSensor,MotionSensor
@@ -118,30 +119,34 @@ class Robot2I013(object):
         return math.fabs(currentRight-lastRight)*self.WHEEL_CIRCUMFERENCE/360
 
     def isRed(self, color):
+        ecart = 30
         r,g,b = color
-        return r>=b and b>=g
-        #return r>200 and b<20 and g<20
+        return r>=b and b>=g and r-b>ecart
+
     def isGreen(self, color):
+        ecart = 30
         r,g,b = color
-        return g>=r and r>=b 
-        #return g>200 and b<20 and r<20
+        return g>=r and r>=b and g-r>ecart
+
     def isBlue(self, color):
+        ecart = 30
         r,g,b = color
-        return b>=g and g>=r
-        #return b>200 and r<20 and g<20
+        return b>=g and g>=r and b-g>ecart
       
     def isYellow(self, color):
+        ecart = 30
         r,g,b = color
-        return math.fabs(r-g)<=20
-        #return r>200 and g>200 and b<20
+        return math.fabs(r-g)<=20 and (r-b>ecart or g-b>ecart)
+
     def isColor(self,color):
+        ecart = 10
         r,g,b = color
-        return math.fabs(r-g)>=30 and math.fabs(g-b)>=30
+        return not (math.fabs(r-g)<=ecart and math.fabs(g-b)<=ecart and math.fabs(r-b)<=ecart)
 
     def detecter_balise(self, img):
         dist = 20
         fenetre = (dist,dist)
-        img = Image.open(img)
+        img = Image.open("reel/"+img)
         width, height = img.size
         
         i = 0
