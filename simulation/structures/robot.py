@@ -92,9 +92,13 @@ class Robot:
         vx, vy = self.tete.getOrientation()
         for i in range(0,100):
             self.points = []
-            for j in range(0,10):
-                a = (p1[0]+p2[0])/2 + i*va
-                b = (p1[1]+p2[1]+j)/2 + i*vb
+            for j in range(ROBOT_LARGEUR+ROBOT_LARGEUR//2):
+                if(self.direction[0]>self.direction[1]):
+                    a = (p1[0]+p2[0])/2 + i*va
+                    b = (p1[1]+p2[1]+j)/2 + i*vb
+                else:
+                    a = (p1[0]+p2[0]+j)/2 + i*va
+                    b = (p1[1]+p2[1])/2 + i*vb
                 self.points.append((a, b, 0))
                 #print("({0}, {1})".format(a,b))
                 if(self.tete.isCube((a, b, 0), self.arene.cubes+self.arene.balises)):
@@ -167,30 +171,35 @@ class Robot:
         print("simulation/tmp/img{0}.jpeg".format(cpt))
 
     def isRed(self, color):
+        ecart = 30
         r,g,b = color
-        #return r>=b and b>=g 
-        return r>200 and b<20 and g<20
+        return r>=b and b>=g and r-b>ecart
+        #return r>200 and b<20 and g<20
     def isGreen(self, color):
+        ecart = 30
         r,g,b = color
-        #return g>=r and r>=b 
-        return g>200 and b<20 and r<20
+        return g>=r and r>=b and g-r>ecart
+        #return g>200 and b<20 and r<20
     def isBlue(self, color):
+        ecart = 30
         r,g,b = color
-        #return b>=g and g>=r
-        return b>200 and r<20 and g<20
+        return b>=g and g>=r and b-g>ecart
+        #return b>200 and r<20 and g<20
       
     def isYellow(self, color):
+        ecart = 30
         r,g,b = color
-        #return math.fabs(r-g)<=20
-        return r>200 and g>200 and b<20
+        return math.fabs(r-g)<=20 and (r-b>ecart or g-b>ecart)
+        #return r>200 and g>200 and b<20
     def isColor(self,color):
+        ecart = 10
         r,g,b = color
-        return math.fabs(r-g)>=10 and math.fabs(g-b)>=10
+        return not (math.fabs(r-g)<=ecart and math.fabs(g-b)<=ecart and math.fabs(r-b)<=ecart)
 
     def detecter_balise(self, img):
         dist = 20
         fenetre = (dist,dist)
-        img = Image.open(img)
+        img = Image.open("simulation/"+img)
         width, height = img.size
         
         i = 0
@@ -213,22 +222,22 @@ class Robot:
                     r1, g1, b1 = k
                     iter = 0
                     while(iter < len(list_couleur)):
-                        if('r' in list_couleur and self.isRed(k)): #and self.isColor(list_coin[iter])):
+                        if('r' in list_couleur and self.isRed(k)and self.isColor(list_coin[iter])):
                             list_couleur.remove('r')
                             #print('rouge')
-                            #img.putpixel((i,j), (255,108,0))
-                        if('g' in list_couleur and self.isGreen(k)):#and self.isColor(list_coin[iter])):
+                            img.putpixel((i,j), (255,108,0))
+                        if('g' in list_couleur and self.isGreen(k)and self.isColor(list_coin[iter])):
                             list_couleur.remove('g')
                             #print('green')
-                            #img.putpixel((i,j), (0,177,100))
-                        if('b' in list_couleur and self.isBlue(k)):#and self.isColor(list_coin[iter])):
+                            img.putpixel((i,j), (0,177,100))
+                        if('b' in list_couleur and self.isBlue(k)and self.isColor(list_coin[iter])):
                             list_couleur.remove('b')
                             #print('blue')
-                            #img.putpixel((i,j), (210,0,255))
-                        if('y' in list_couleur and self.isYellow(k)):#and self.isColor(list_coin[iter])):
+                            img.putpixel((i,j), (210,0,255))
+                        if('y' in list_couleur and self.isYellow(k)and self.isColor(list_coin[iter])):
                             list_couleur.remove('y')
                             #print('yellow')
-                            #img.putpixel((i,j), (255,255,255))
+                            img.putpixel((i,j), (255,255,255))
                         iter += 1
                     if(len(list_couleur) == 1):
                         print("Cible trouvée: pixel:",i,j)
@@ -237,12 +246,12 @@ class Robot:
                             for y in range(dist):
                                 img.putpixel((i+x,j+y),(255,0,255))
                                 
-                        #img.show()
+                        img.show()
 
                         return (True,(i,j))
                 j+=dist//2
             i+=dist//2
-        #img.show()
+        img.show()
 
         print("Pas de cible")
         return (False,(-1,-1))
@@ -368,7 +377,7 @@ class Robot:
         self.coords = coords
 
 def Creation_Robot(controler):
-	position = (500,299,0)
+	position = (500,300,0)
 	direction = (1,0)
 	dimension = (ROBOT_LONGUEUR, ROBOT_LARGEUR, ROBOT_HAUTEUR)
 	vitesse = (0)
