@@ -109,9 +109,9 @@ class Robot2I013(object):
         return distance
 
     def save_image(self, cpt):
-        img = self.getimage()
-        imgpil = Image.fromarray(img)
-        imgpil.save("tmp/img{0}.jpeg".format(cpt))
+        img = self.get_image()
+        #imgpil = Image.fromarray(img)
+        img.save("reel/tmp/img{0}.jpeg".format(cpt))
         
     def distance(self, last, current):
         lastRight, LastLeft = last
@@ -172,19 +172,19 @@ class Robot2I013(object):
                         if('r' in list_couleur and self.isRed(k)and self.isColor(list_coin[iter])):
                             list_couleur.remove('r')
                             #print('rouge')
-                            img.putpixel((i,j), (255,108,0))
+                            #img.putpixel((i,j), (255,108,0))
                         if('g' in list_couleur and self.isGreen(k)and self.isColor(list_coin[iter])):
                             list_couleur.remove('g')
                             #print('green')
-                            img.putpixel((i,j), (0,177,100))
+                            #img.putpixel((i,j), (0,177,100))
                         if('b' in list_couleur and self.isBlue(k)and self.isColor(list_coin[iter])):
                             list_couleur.remove('b')
                             #print('blue')
-                            img.putpixel((i,j), (210,0,255))
+                            #img.putpixel((i,j), (210,0,255))
                         if('y' in list_couleur and self.isYellow(k)and self.isColor(list_coin[iter])):
                             list_couleur.remove('y')
                             #print('yellow')
-                            img.putpixel((i,j), (255,255,255))
+                            #img.putpixel((i,j), (255,255,255))
                         """else:
                             print('rien')
                             img.putpixel((i,j), (184,177,171))"""
@@ -203,6 +203,8 @@ class Robot2I013(object):
                 j+=dist/2
             i+=dist/2
         #img.show()
+        print("pas de cible")
+        return (False, (-1,-1))
 #--------------------------------------------------------------------------------
     def run(self,verbose=True):
         """ 
