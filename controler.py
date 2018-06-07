@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-#from reel.robot2I013 import Robot2I013
-from simulation.structures.robot import Robot
-from simulation.structures.robot import Creation_Robot
-from simulation.vues.vue2d import Vue2D
-from simulation.vues.vue3d import Vue3D
+from reel.robot2I013 import Robot2I013
+from reel.robot2I013 import Creation_Robot
+#from simulation.structures.robot import Robot
+#from simulation.structures.robot import Creation_Robot
+#from simulation.vues.vue2d import Vue2D
+#from simulation.vues.vue3d import Vue3D
 from cste import *
 import time
 import numpy as np
@@ -17,13 +18,14 @@ class TestControler(object):
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
         #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise, 8=double cercle
-        self.strategie = 6
+        self.strategie = 1
         self.tour = 0
         self.temoin = False 
         self.distance = 0
         self.cpt = 1
+        self.cptBis = 0
         self.save = 0
-        self.vue = Vue2D(self)
+        #self.vue = Vue2D(self)
 
     def droit(self, D):
         """
@@ -68,8 +70,8 @@ class TestControler(object):
             sens = sens*(RIGHT)
         self.robot.rotate(sens)
         self.distance += self.robot.distance(self.lastPosition, self.currentPosition)
-        print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)))
-        if(self.distance > math.pi*(self.robot.WHEEL_DIAMETER*0.4)/(360/D)):
+        print("{0} > {1}\n".format(self.distance, math.pi*(self.robot.WHEEL_DIAMETER*1.4)/(360/D)))
+        if(self.distance > math.pi*(self.robot.WHEEL_DIAMETER*1.4)/(360/D)):
                 self.robot.stop()
                 self.robot.set_led(self.robot.LED_LEFT_EYE, 0, 255, 0)
                 self.distance = 0
@@ -98,7 +100,7 @@ class TestControler(object):
     def update(self):
         print('\nStratégie: {0}'.format(self.strategie))
         self.currentPosition = self.robot.get_position()
-        if(self.robot.get_distance() <= 100):
+        if(self.robot.get_distance() < 100 and self.strategie != 403):
             self.save = self.strategie
             self.strategie = 403
         if(self.strategie == 0):
@@ -136,19 +138,26 @@ class TestControler(object):
             self.robot.detecter_balise("tmp/img1.jpeg")
             self.strategie = 0
         elif(self.strategie == 7):
-            if(self.cpt %10 == 0):
-                self.robot.save_image(self.cpt/10)
-                detecte, cible = self.robot.detecter_balise("tmp/img{0}.jpeg".format(self.cpt/10))
-                if (detecte):
-                    if (cible[0]<IMG_WIDTH/3):
-                        self.rotation(LEFT,20)
-                    if (cible[0]>2*IMG_WIDTH/3):
-                        self.rotation(RIGHT,20)
-                    else: 
-                        self.droit(50)
-            #else:
-                #self.strategie = 0
-            self.cpt += 1
+        	print("cptBis: ".format(self.cptBis))
+        	if(self.cpt %5 == 0):
+        		num = (int)(self.cpt/5)
+        		self.robot.save_image(num)
+        		detecte, cible = self.robot.detecter_balise("tmp/img{0}.jpeg".format(num))
+        		if (detecte):
+        			self.cptBis = 0
+        			if (cible[0]<IMG_WIDTH/3):
+        				self.rotation(LEFT,30)
+        			if (cible[0]>2*IMG_WIDTH/3):
+        				self.rotation(RIGHT,30)
+        			else: 
+        				self.droit(50)
+        		else:
+        			self.droit(50)
+        			self.cptBis += 1
+        	if(self.cptBis >= 50):
+        		self.robot.stop()
+        		exit(0)
+        	self.cpt += 1
         elif(self.strategie == 8):
             if(self.temoin):
                 if(self.courbe(RIGHT, 1.02)):
@@ -157,10 +166,16 @@ class TestControler(object):
                 if(self.courbe(LEFT, 1.2)):
                     self.temoin = True
         elif(self.strategie == 403):
-            self.robot.stop()
-            print('stop')
-            if(self.robot.get_distance() > 100):
-                self.strategie = self.save
+        	self.cptBis += 1
+        	self.robot.stop()
+        	print('stop')
+        	print('cptBis: {0}'.format(self.cptBis))
+        	print('save: {0}'.format(self.save))
+        	if(self.robot.get_distance() >= 100):
+        		self.cptBis = 0
+        		self.strategie = self.save
+        	if(self.cptBis >= 50):
+        		exit(0)
         else:
             print("rien")
         self.lastPosition = self.currentPosition
