@@ -18,7 +18,7 @@ class TestControler(object):
         self.lastPosition = self.robot.get_position()
         self.currentPosition = self.robot.get_position()
         #strategie 0=exit, 1=droit 70cm, 2=rotation 90°, 3=carre, 4=cercle, 5=séries de photos, 6=detection de balise, 7=suivi de balise, 8=double cercle
-        self.strategie = 1
+        self.strategie = 7
         self.tour = 0
         self.temoin = False 
         self.distance = 0
@@ -149,20 +149,21 @@ class TestControler(object):
         			self.cptBis = 0
         			if (cible[0]<IMG_WIDTH/3):
         				self.saveBis = 2
-        			if (cible[0]>2*IMG_WIDTH/3):
+        			elif (cible[0]>2*IMG_WIDTH/3):
         				self.saveBis = 3
         			else:
-        				self.saveBis = 0 
-        				self.droit(50)
+        				self.saveBis = 1
         		else:
-        			self.droit(50)
         			self.cptBis += 1
         	if(self.saveBis != 0):
-        		if(self.saveBis == 2):
-        			if(self.rotation(LEFT,30)):
+        		if(self.saveBis == 1):
+        			if(self.droit(200)):
+        				self.saveBis = 0
+        		elif(self.saveBis == 2):
+        			if(self.rotation(LEFT,10)):
         				self.saveBis = 0
         		elif(self.saveBis == 3):
-        			if(self.rotation(RIGHT,30)):
+        			if(self.rotation(RIGHT,10)):
         				self.saveBis = 0
         		else:
         			print("ERROR: saveBis")
