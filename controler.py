@@ -25,6 +25,7 @@ class TestControler(object):
         self.cpt = 1
         self.cptBis = 0
         self.save = 0
+        self.saveBis = 0
         #self.vue = Vue2D(self)
 
     def droit(self, D):
@@ -138,7 +139,8 @@ class TestControler(object):
             self.robot.detecter_balise("tmp/img1.jpeg")
             self.strategie = 0
         elif(self.strategie == 7):
-        	print("cptBis: ".format(self.cptBis))
+        	print("saveBis:\t{0}".format(self.saveBis))
+        	print("cptBis:\t{0}".format(self.cptBis))
         	if(self.cpt %5 == 0):
         		num = (int)(self.cpt/5)
         		self.robot.save_image(num)
@@ -146,14 +148,24 @@ class TestControler(object):
         		if (detecte):
         			self.cptBis = 0
         			if (cible[0]<IMG_WIDTH/3):
-        				self.rotation(LEFT,30)
+        				self.saveBis = 2
         			if (cible[0]>2*IMG_WIDTH/3):
-        				self.rotation(RIGHT,30)
-        			else: 
+        				self.saveBis = 3
+        			else:
+        				self.saveBis = 0 
         				self.droit(50)
         		else:
         			self.droit(50)
         			self.cptBis += 1
+        	if(self.saveBis != 0):
+        		if(self.saveBis == 2):
+        			if(self.rotation(LEFT,30)):
+        				self.saveBis = 0
+        		elif(self.saveBis == 3):
+        			if(self.rotation(RIGHT,30)):
+        				self.saveBis = 0
+        		else:
+        			print("ERROR: saveBis")
         	if(self.cptBis >= 50):
         		self.robot.stop()
         		exit(0)
